@@ -39,7 +39,7 @@ export default function WalletConnect() {
             setWalletConnected(false);
             setUserAddress('');
         }
-    }, [isConnected, account]);
+    }, [isConnected, account, setUserAddress, setWalletConnected]);
 
     if (!isConnected)
         return (
