@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
-import Wallet from '@component/components/WalletConnect';
 import Header from '@component/components/Header';
 import punk1 from '../public/punk1.png';
 import punk2 from '../public/punk2.png';

@@ -1,17 +1,21 @@
 import { useWeb3Modal } from '@web3modal/react';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import Button from './Button';
 import Link from 'next/link';
-
+import UserContext, { UserContextType } from './UserContext';
+import { useRouter } from 'next/router';
 export default function WalletConnect() {
     const [loading, setLoading] = useState(false);
     const { open } = useWeb3Modal();
     const { isConnected } = useAccount();
     const { disconnect } = useDisconnect();
     const label = isConnected ? 'Disconnect' : 'Connect Wallet';
-    console.log(open);
+    const account = useAccount();
+    const { setWalletConnected, setUserAddress } = useContext(UserContext) as UserContextType;
 
+    const route = useRouter();
+    const { pathname } = route;
     async function onOpen() {
         setLoading(true);
         await open();
@@ -26,6 +30,17 @@ export default function WalletConnect() {
         }
     }
 
+    useEffect(() => {
+        isConnected ? setWalletConnected(true) : setWalletConnected(false);
+        if (isConnected && account.address) {
+            setWalletConnected(true);
+            setUserAddress(account.address);
+        } else {
+            setWalletConnected(false);
+            setUserAddress('');
+        }
+    }, [isConnected, account]);
+
     if (!isConnected)
         return (
             <Button
@@ -36,11 +51,15 @@ export default function WalletConnect() {
         );
     return (
         <div className="space-x-[10px]">
-            <Link
-                href={'/'}
-                className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
-                Go To App
-            </Link>
+            {pathname === '/' ? (
+                <Link
+                    href={'/nfts'}
+                    className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
+                    Go To App
+                </Link>
+            ) : (
+                <></>
+            )}
             <Button
                 onClick={onClick}
                 disabled={loading}

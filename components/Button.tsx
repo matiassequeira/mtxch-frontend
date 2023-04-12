@@ -8,7 +8,6 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ color, text, onClick, disabled }) => {
-    console.log(color);
     return (
         <button
             className={` ${
