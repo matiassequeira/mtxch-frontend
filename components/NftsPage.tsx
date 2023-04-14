@@ -1,83 +1,61 @@
-import React, { useContext, useState } from 'react';
-import Web3 from 'web3';
-import UserContext, { UserContextType } from './UserContext';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import NftList from './NftList';
-const web3 = new Web3('https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6'); // Replace YOUR-PROJECT-ID with your own Infura project ID
+import NftItem from './NftItem';
+import { useAccount } from 'wagmi';
 
-const erc721ABI: any = [
-    // /* ERC-721 contract ABI goes here */
-]; // You can find the ABI from Etherscan or another trusted source
-const nftCollections = ['0xE29F8038d1A3445Ab22AD1373c65eC0a6E1161a4'];
+interface NftItem {
+    image_url: string | null;
+}
 
 const NftsPage = () => {
-    const { userAddress } = useContext(UserContext) as UserContextType; // Replace with the address you want to check
-    const [tokenIds, setTokenIds] = useState<number[]>([]);
+    const { address } = useAccount();
+    const [userNfts, setUserNfts] = useState<NftItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    //     if (!userAddress) return null;
-    //     const getTokenIdsOwnedByAddress = async (contract: any, address: any) => {
-    //         try {
-    //             const balance = await contract.methods.balanceOf(address).call();
+    useEffect(() => {
+        if (!address) return;
+        async function fetchUserNfts(address: string) {
+            const response = await fetch(
+                `https://testnets-api.opensea.io/api/v1/assets?owner=${address}`,
+            );
+            const data = await response.json();
+            const userNfts = data.assets;
+            setUserNfts(userNfts);
+        }
+        fetchUserNfts(address);
+        setLoading(false);
+    }, [address]);
 
-    //             if (balance > 0) {
-    //                 const totalSupply = await contract.methods.totalSupply().call();
-    //                 const ownedTokenIds = [];
+    if (!address) return null;
 
-    //                 for (let tokenId = 1; tokenId <= totalSupply; tokenId++) {
-    //                     const tokenOwner = await contract.methods.ownerOf(tokenId).call();
-
-    //                     if (tokenOwner.toLowerCase() === address.toLowerCase()) {
-    //                         ownedTokenIds.push(tokenId);
-    //                     }
-    //                 }
-
-    //                 return ownedTokenIds;
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-
-    //         return [];
-    //     };
-
-    // async function checkUserTokens(userAddress: string, nftCollections: string[]) {
-    // for (const nftCollectionAddress of nftCollections) {
-
-    // const nftContract = new web3.eth.Contract(erc721ABI, nftCollectionAddress);
-    // const tokenIds = await getTokenIdsOwnedByAddress(nftContract, userAddress);
-
-    // if (tokenIds.length > 0) {
-    //     console.log(
-    //         `Token IDs owned by ${userAddress} in the collection ${nftCollectionAddress}:`,
-    //         tokenIds,
-    //     );
-    //     setTokenIds(tokenIds);
-    // }
-    // }
-    // }
-
-    // checkUserTokens(userAddress, nftCollections);
-
-    // async function getNFTImageURL(contract: any, tokenId: number[]) {
-    //     try {
-    //         const tokenURI = await contract.methods.tokenURI(tokenId).call();
-    //         const response = await axios.get(tokenURI);
-    //         const metadata = response.data;
-
-    //         if (metadata && metadata.image) {
-    //             return metadata.image;
-    //         }
-    //     } catch (error) {
-    //         console.error(`Failed to fetch image URL for token ID ${tokenId}:`, error);
-    //     }
-
-    //     return null;
-    // }
     return (
         <>
             <Header />
-            <NftList />
+            {loading ? <div className="mx-[120px]">Your NFTs are being loaded...</div> : null}
+
+            {userNfts.length && !loading ? (
+                <div>
+                    <div className="px-[120px] mb-3 space-y-6">
+                        <h1>Choose NFT for Loan Request</h1>
+                        <div className="grid grid-cols-4 gap-4 w-full ">
+                            {userNfts.map((item) => {
+                                if (item.image_url?.startsWith('ipfs://')) {
+                                    item.image_url = `https://ipfs.io/ipfs/${
+                                        item.image_url.split('ipfs://')[1]
+                                    }`;
+                                }
+
+                                if (!item.image_url)
+                                    item.image_url = 'https://via.placeholder.com/300';
+
+                                return <NftItem imageSrc={item.image_url} key={Math.random()} />;
+                            })}
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="px-[120px]">You have no NFTs</div>
+            )}
         </>
     );
 };

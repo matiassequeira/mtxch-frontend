@@ -3,7 +3,15 @@ import React from 'react';
 
 const NftItem = ({ imageSrc }: any) => {
     return (
-        <Image src={imageSrc} alt={''} width={250} height={250} className="hover:cursor-pointer" />
+        <div className="overflow-hidden w-[300px] h-[300px]">
+            <Image
+                src={imageSrc}
+                alt={''}
+                width={300}
+                height={300}
+                className="hover:cursor-pointer"
+            />
+        </div>
     );
 };
 
