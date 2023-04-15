@@ -11,7 +11,6 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Home() {
     return (
         <main className="w-full h-[100vh]">
-            <Header />
             <div className="w-full h-[calc(100vh-90px)] text-center flex items-center justify-center space-x-[80px]">
                 <div className="flex flex-col items-start text-start space-y-[20px]">
                     <h1 className="text-[50px] font-medium">

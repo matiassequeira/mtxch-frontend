@@ -4,6 +4,7 @@ import { Web3Modal } from '@web3modal/react';
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { goerli } from 'wagmi/chains';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const projectId = '6b8bb11f0139a5d4e9e753fc752d7ac6';
 const chains = [goerli];
@@ -18,6 +19,7 @@ const wagmiClient = createClient({
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
+    const [queryClient] = useState(() => new QueryClient());
     const [ready, setReady] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
     const [userAddress, setUserAddress] = useState('');
@@ -26,12 +28,14 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         setReady(true);
     }, []);
     return (
-        <UserContext.Provider
-            value={{ walletConnected, setWalletConnected, userAddress, setUserAddress }}>
-            {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
+        <QueryClientProvider client={queryClient}>
+            <UserContext.Provider
+                value={{ walletConnected, setWalletConnected, userAddress, setUserAddress }}>
+                {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
 
-            <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-        </UserContext.Provider>
+                <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+            </UserContext.Provider>
+        </QueryClientProvider>
     );
 };
 

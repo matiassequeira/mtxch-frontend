@@ -1,16 +1,26 @@
 import Image from 'next/image';
 import React from 'react';
+import { NftItemInterface } from './NftsPage';
+import Link from 'next/link';
 
-const NftItem = ({ imageSrc }: any) => {
+const NftItem = (item: NftItemInterface) => {
     return (
-        <div className="overflow-hidden w-[300px] h-[300px]">
-            <Image
-                src={imageSrc}
-                alt={''}
-                width={300}
-                height={300}
-                className="hover:cursor-pointer"
-            />
+        <div>
+            <div className="overflow-hidden w-[230px] h-[230px]">
+                <Link href={`/nfts/${item.asset_contract.address}/${item.token_id}`}>
+                    <Image
+                        src={item.image_url || 'https://via.placeholder.com/300'}
+                        alt={''}
+                        width={230}
+                        height={230}
+                        quality={100}
+                        className="hover:cursor-pointer object-cover"
+                    />
+                </Link>
+            </div>
+            <h1 className=" text-base">
+                {item.asset_contract.name} #{item.token_id}
+            </h1>
         </div>
     );
 };
