@@ -4,7 +4,7 @@ import Wallet from './WalletConnect';
 
 const Header = () => {
     return (
-        <div className="flex justify-between items-center px-[120px] h-[90px]">
+        <div className="flex justify-between items-center px-6 md:px-[120px] h-[90px]">
             <Link href={'/'} className=" font-bold">
                 MetaXChg
             </Link>
