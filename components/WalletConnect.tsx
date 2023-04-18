@@ -53,22 +53,33 @@ export default function WalletConnect() {
         <>
             <div className="space-x-[10px]">
                 {pathname === '/' ? (
-                    <Link
-                        href={'/nfts'}
-                        className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
-                        Go To App
-                    </Link>
+                    <>
+                        <Link
+                            href={'/nfts'}
+                            className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
+                            Go To App
+                        </Link>
+                        <div className="hidden sm:inline-block">
+                            <Button
+                                onClick={onClick}
+                                disabled={loading}
+                                text={loading ? 'Loading...' : label}
+                                color="black"
+                            />
+                        </div>
+                    </>
                 ) : (
-                    <></>
+                    <>
+                        <div className="">
+                            <Button
+                                onClick={onClick}
+                                disabled={loading}
+                                text={loading ? 'Loading...' : label}
+                                color="black"
+                            />
+                        </div>
+                    </>
                 )}
-                <div className="hidden sm:inline-block">
-                    <Button
-                        onClick={onClick}
-                        disabled={loading}
-                        text={loading ? 'Loading...' : label}
-                        color="black"
-                    />
-                </div>
             </div>
         </>
     );

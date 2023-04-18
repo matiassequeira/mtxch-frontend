@@ -10,7 +10,7 @@ export interface NftItemInterface {
     token_id: string;
     image_url: string | null;
     asset_contract: {
-        address: string;
+        address: `0x${string}`;
         description: string; // ui
         name: string; // ui
     };
@@ -20,7 +20,7 @@ export interface NftItemInterface {
     top_ownerships: [
         {
             owner: {
-                address: string;
+                address: `0x${string}`;
             };
         },
     ];
@@ -28,9 +28,8 @@ export interface NftItemInterface {
 
 const NftsPage = () => {
     const { address } = useAccount();
-    // const [userNfts, setUserNfts] = useState<NftItemInterface[]>([]);
     const { data, isLoading, isError } = useQuery(
-        'nfts',
+        ['nfts', address],
         () => axios.get(`https://testnets-api.opensea.io/api/v1/assets?owner=${address}`),
         { keepPreviousData: true, retry: true, retryDelay: 1000 },
     );

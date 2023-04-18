@@ -6,6 +6,7 @@ import punk2 from '../public/punk2.png';
 import punk3 from '../public/punk3.png';
 import punk4 from '../public/punk4.png';
 import Button from '@component/components/Button';
+import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
@@ -20,8 +21,12 @@ export default function Home() {
                         Use your NFTs as collateral, Get <p>a Loan on Any Chain</p>
                     </h2>
                     <div className="flex space-x-[10px] justify-center">
-                        <Button color="black" text="Get a Loan" />
-                        <Button color="white" text="Become a Lender" />
+                        <Link href={'/loans'}>
+                            <Button color="black" text="Get a Loan" />
+                        </Link>
+                        <Link href={'/lend'}>
+                            <Button color="white" text="Become a Lender" />
+                        </Link>
                     </div>
                 </div>
 

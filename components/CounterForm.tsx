@@ -1,13 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { NftItemInterface } from './NftsPage';
-import { useAccount } from 'wagmi';
-import { useContractRead } from 'wagmi';
-import metaxchContract from '../contracts/metaxchg.json';
-import erc721 from '../contracts/ERC721.json';
-
-const metaxchAbi = metaxchContract.abi;
-const erc721Abi = erc721.abi;
 
 interface FormValues {
     LoanAmount: number;
@@ -17,19 +9,7 @@ interface FormValues {
     InjAddress: string;
 }
 
-const ListForm = (props: NftItemInterface) => {
-    // const { token_id, asset_contract } = props;
-    // const collectionAddress = asset_contract.address;
-    // const { address } = useAccount();
-
-    // if (!address) return null;
-
-    // const { data, isError, isLoading } = useContractRead({
-    //     address: address,
-    //     abi: metaxchAbi,
-    //     functionName: 'getInterestRate',
-    // });
-
+const CounterForm = ({ closeMenu }: { closeMenu: () => void }) => {
     const {
         register,
         formState: { errors },
@@ -48,15 +28,16 @@ const ListForm = (props: NftItemInterface) => {
             return;
         }
         console.log(data);
+        closeMenu();
         // reset();
     };
 
     return (
         <div>
-            <strong className="text-[28px]">Desired Terms</strong>
-            <form className="flex flex-col space-y-8 mt-10" onSubmit={handleSubmit(onSubmit)}>
+            <h2 className="font-bold">Your Offer</h2>
+            <form className="flex flex-col space-y-8" onSubmit={handleSubmit(onSubmit)}>
                 <label>
-                    <div className="text-[24px] flex">
+                    <div className="flex">
                         <input
                             {...register('LoanAmount', {
                                 required: 'Value is required',
@@ -64,9 +45,9 @@ const ListForm = (props: NftItemInterface) => {
                                 min: { value: 0.001, message: 'Value should be more' },
                             })}
                             placeholder="Loan Amount"
-                            className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
+                            className=" text-[16px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[220px] h-[40px]"
                         />
-                        <div className="flex items-center justify-center text-[20px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[80px] h-[45px]">
+                        <div className="flex items-center justify-center text-[16px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[60px] h-[40px]">
                             WETH
                         </div>
                     </div>
@@ -83,9 +64,9 @@ const ListForm = (props: NftItemInterface) => {
                                 min: { value: 0.001, message: 'Value should be more' },
                             })}
                             placeholder="Token Valuation"
-                            className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
+                            className=" text-[16px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[220px] h-[40px]"
                         />
-                        <div className="flex items-center justify-center text-[20px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[80px] h-[45px]">
+                        <div className="flex items-center justify-center text-[16px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[60px] h-[40px]">
                             WETH
                         </div>
                     </div>
@@ -102,7 +83,7 @@ const ListForm = (props: NftItemInterface) => {
                                 min: { value: 1, message: 'Value should be more than 1' },
                             })}
                             placeholder="Your Injective Address"
-                            className=" text-[20px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[45px]"
+                            className=" text-[16px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[40px]"
                         />
                     </div>
                     <p className="text-[#FF0000] text-[14px]">
@@ -112,7 +93,7 @@ const ListForm = (props: NftItemInterface) => {
                 <label>
                     <select
                         {...register('Duration')}
-                        className=" text-[20px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[45px]">
+                        className=" text-[16px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[40px]">
                         <option value={30}>30 days</option>
                         <option value={60}>60 days</option>
                         <option value={90}>90 days</option>
@@ -121,7 +102,7 @@ const ListForm = (props: NftItemInterface) => {
                 </label>
 
                 <input
-                    value="List"
+                    value="Submit Offer"
                     type="submit"
                     className="bg-black text-white rounded-md w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px] "
                 />
@@ -130,4 +111,4 @@ const ListForm = (props: NftItemInterface) => {
     );
 };
 
-export default ListForm;
+export default CounterForm;

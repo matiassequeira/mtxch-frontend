@@ -32,7 +32,7 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
     const { address } = useAccount();
 
     const { data }: any = useQuery(
-        'collection',
+        `collection/${slug}`,
         () => axios.get(`https://testnets-api.opensea.io/api/v1/collection/${slug}`),
         { keepPreviousData: true, retry: true, retryDelay: 1000 },
     );
@@ -57,10 +57,10 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
                     {name} #{token_id}
                 </h1>
                 <h1>Floor: {floorPrice}ETH</h1>
-                <h1>Max Loan: {maxFloat.toFixed(3)}ETH</h1>
+                {/* <h1>Max Loan: {maxFloat.toFixed(3)}ETH</h1> */}
             </div>
 
-            <ListForm />
+            <ListForm {...nftData} />
         </div>
     );
 };
