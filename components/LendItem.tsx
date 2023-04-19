@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React, { FC, useEffect, useState } from 'react';
 import Counter from './Counter';
+import Button from './Button';
 
 export interface LendItemProps {
     src: any;
@@ -22,6 +23,10 @@ const LendItem: FC<LendItemProps> = (props) => {
         }
     };
 
+    const notifiOnClick = () => {
+        alert('You have accepted the offer!');
+    };
+
     const closeMenu = () => {
         setOpenCounterMenu(false);
         setOpenAcceptMenu(false);
@@ -38,8 +43,9 @@ const LendItem: FC<LendItemProps> = (props) => {
                         <h2>APR: {APR.toFixed(1)}%</h2>
                     </div>
                 </div>
-                <div>
-                    <div>
+                <div className="flex items-center">
+                    <Button color="black" text="Accept" onClick={notifiOnClick} />
+                    {/* <div>
                         <input
                             className="w-[15px] h-[15px] mr-2"
                             type="checkbox"
@@ -56,10 +62,10 @@ const LendItem: FC<LendItemProps> = (props) => {
                             onClick={handleClick}
                         />
                         <label htmlFor="accept">Accept</label>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-            {openCounterMenu ? <Counter closeMenu={closeMenu} {...props} /> : null}
+            {/* {openCounterMenu ? <Counter closeMenu={closeMenu} {...props} /> : null} */}
         </>
     );
 };
