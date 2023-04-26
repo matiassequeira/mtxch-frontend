@@ -35,12 +35,10 @@ const Lend = () => {
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
 
             const offers = await contract.getOffers();
-            const loans = await contract.getLoans();
-            console.log(loans);
             setOffers(offers);
         };
         getOffers();
-    }, []);
+    }, [address]);
 
     return (
         <div className="px-[120px] ">

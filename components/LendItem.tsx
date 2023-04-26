@@ -19,7 +19,6 @@ const LendItem: FC<LendItemProps> = (props) => {
     const { src, loanAmount, APR, duration, nftAddress, tokenId } = props;
     const [openCounterMenu, setOpenCounterMenu] = useState(false);
     const [openAcceptMenu, setOpenAcceptMenu] = useState(false);
-    const [firstSrc, setFirstSrc] = useState(false);
 
     const [nftSrc, setNftSrc] = useState(src);
 
