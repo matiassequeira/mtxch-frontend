@@ -1,8 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { NftItemInterface } from './NftsPage';
-import { useAccount } from 'wagmi';
-import { useContractRead } from 'wagmi';
 import metaxchContract from '../contracts/metaxchg.json';
 import erc721 from '../contracts/ERC721.json';
 
@@ -17,18 +15,16 @@ interface FormValues {
     InjAddress: string;
 }
 
-const ListForm = (props: NftItemInterface) => {
-    // const { token_id, asset_contract } = props;
+interface ListFormProps {
+    listNft: (data: FormValues) => void;
+}
+
+const ListForm = (props: ListFormProps) => {
+    const { listNft } = props;
     // const collectionAddress = asset_contract.address;
     // const { address } = useAccount();
 
     // if (!address) return null;
-
-    // const { data, isError, isLoading } = useContractRead({
-    //     address: address,
-    //     abi: metaxchAbi,
-    //     functionName: 'getInterestRate',
-    // });
 
     const {
         register,
@@ -47,12 +43,21 @@ const ListForm = (props: NftItemInterface) => {
             setError('TokenValuation', { type: 'NaN', message: 'Only numbers are eligible' });
             return;
         }
+
         if (isNaN(data.APR)) {
             setError('APR', { type: 'NaN', message: 'Only numbers are eligible' });
             return;
         }
-        alert('You have successfully list your NFT');
-        console.log(data);
+        if (data.LoanAmount / data.TokenValuation > 0.6) {
+            setError('LoanAmount', {
+                type: '60',
+                message: `Loan Amount can not be more than ${data.TokenValuation * 0.6}`,
+            });
+            return;
+        }
+
+        // alert('You have successfully list your NFT');
+        listNft(data);
         // reset();
     };
 
@@ -63,29 +68,11 @@ const ListForm = (props: NftItemInterface) => {
                 <label>
                     <div className="text-[24px] flex">
                         <input
-                            {...register('LoanAmount', {
-                                required: 'Value is required',
-                                valueAsNumber: true,
-                                min: { value: 0.001, message: 'Value should be more' },
-                            })}
-                            placeholder="Loan Amount"
-                            className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
-                        />
-                        <div className="flex items-center justify-center text-[20px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[80px] h-[45px]">
-                            WETH
-                        </div>
-                    </div>
-                    <p className="text-[#FF0000] text-[14px]">
-                        {errors?.LoanAmount && errors.LoanAmount.message}
-                    </p>
-                </label>
-                <label>
-                    <div className="text-[24px] flex">
-                        <input
                             {...register('TokenValuation', {
                                 required: 'Value is required',
                                 valueAsNumber: true,
-                                min: { value: 0.001, message: 'Value should be more' },
+                                min: { value: 0, message: 'Value should be more than 0' },
+                                value: 1.5,
                             })}
                             placeholder="Token Valuation"
                             className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
@@ -101,12 +88,34 @@ const ListForm = (props: NftItemInterface) => {
                 <label>
                     <div className="text-[24px] flex">
                         <input
-                            {...register('APR', {
+                            {...register('LoanAmount', {
                                 required: 'Value is required',
                                 valueAsNumber: true,
-                                min: { value: 0.001, message: 'Value should be more' },
+                                min: { value: 0, message: 'Value should be more than 0' },
+                                value: 1,
                             })}
                             placeholder="Loan Amount"
+                            className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
+                        />
+                        <div className="flex items-center justify-center text-[20px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[80px] h-[45px]">
+                            WETH
+                        </div>
+                    </div>
+                    <p className="text-[#FF0000] text-[14px]">
+                        {errors?.LoanAmount && errors.LoanAmount.message}
+                    </p>
+                </label>
+                <label>
+                    <div className="text-[24px] flex">
+                        <input
+                            {...register('APR', {
+                                required: 'Value is required',
+                                value: 20,
+                                valueAsNumber: true,
+                                min: { value: 0, message: 'Value should between 0 and 100' },
+                                max: { value: 100, message: 'Value should between 0 and 100' },
+                            })}
+                            placeholder="APR"
                             className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
                         />
                         <div className="flex items-center justify-center text-[20px] border-[2px] rounded-r-md rounded-sm border-solid border-black pl-2 w-[80px] h-[45px]">
@@ -132,8 +141,7 @@ const ListForm = (props: NftItemInterface) => {
                         <input
                             {...register('InjAddress', {
                                 required: 'Value is required',
-                                valueAsNumber: true,
-                                min: { value: 1, message: 'Value should be more than 1' },
+                                value: 'inj1jr394skmmly2ufnvdqrx6ap7m7qfy9g3qhm9fm',
                             })}
                             placeholder="Your Injective Address"
                             className=" text-[20px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[45px]"
