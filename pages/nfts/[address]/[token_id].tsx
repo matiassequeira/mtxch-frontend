@@ -6,11 +6,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
-import ERC721 from '../../../contracts/ERC721.json';
+// import ERC721 from '../../../contracts/ERC721.json';
 import metaxchg from '../../../contracts/metaxchg.json';
 import { ethers } from 'ethers';
 
-const erc721Abi = ERC721.abi;
+// const erc721Abi = ERC721.abi;
 const metaxchgAbi = metaxchg.abi;
 
 export interface Collection {}
@@ -37,13 +37,13 @@ export const getServerSideProps = async (context: any) => {
 const LoanNft = (props: { nftData: NftItemInterface }) => {
     const { nftData } = props;
     const { image_url, token_id, asset_contract } = nftData;
-    if (!asset_contract) return null;
-    const { name, address } = asset_contract;
+
+    const { name, address: nftAddress } = asset_contract;
 
     const nftOwnerAddress = nftData.top_ownerships[0].owner.address;
     const slug = nftData.collection.slug;
 
-    const { address: userAddress } = useAccount();
+    const { address } = useAccount();
     const { data }: any = useQuery(
         `collection/${slug}`,
         () => axios.get(`https://testnets-api.opensea.io/api/v1/collection/${slug}`),
@@ -82,13 +82,14 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
 
         const makeOffer = async () => {
             const signer = provider.getSigner();
-            const contract = new ethers.Contract(address, metaxchgAbi, signer);
+            const contract = new ethers.Contract(nftAddress, metaxchgAbi, signer);
+            console.log(nftAddress);
 
             const gasPrice = await provider.getGasPrice(); // Get the current gas price
             const gasLimit = 300000;
 
             const offer = await contract.makeOffer(
-                address,
+                nftAddress,
                 token_id,
                 weiTokenValuation.toString(),
                 weiLoanValue.toString(),
@@ -102,7 +103,9 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
         makeOffer();
     };
 
-    if (userAddress?.toLowerCase() !== nftOwnerAddress.toLowerCase())
+    if (!asset_contract) return <>Refresh Page</>;
+
+    if (address?.toLowerCase() !== nftOwnerAddress.toLowerCase())
         return <div className="text-center">This is not your NFT</div>;
     return (
         <div className="px-[120px] flex mb-3">

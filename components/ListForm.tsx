@@ -1,11 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { NftItemInterface } from './NftsPage';
-import metaxchContract from '../contracts/metaxchg.json';
-import erc721 from '../contracts/ERC721.json';
-
-const metaxchAbi = metaxchContract.abi;
-const erc721Abi = erc721.abi;
 
 interface FormValues {
     LoanAmount: number;

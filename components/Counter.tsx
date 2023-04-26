@@ -24,7 +24,7 @@ const Counter: FC<CounterProps> = ({ src, loanAmount, duration, APR, closeMenu }
         document.addEventListener('mousedown', handler);
 
         return () => document.removeEventListener('mousedown', handler);
-    }, []);
+    }, [closeMenu]);
 
     return (
         <div
