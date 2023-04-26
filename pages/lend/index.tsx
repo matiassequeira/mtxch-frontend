@@ -7,6 +7,7 @@ import img4 from '../../public/nftitem4.png';
 import metaxchContract from '../../contracts/metaxchg.json';
 import { ethers } from 'ethers';
 import { useAccount } from 'wagmi';
+import axios from 'axios';
 // import erc721 from '../../contracts/ERC721.json';
 // const erc721Abi = erc721.abi;
 const metaxchgAbi = metaxchContract.abi;
@@ -23,25 +24,24 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 const Lend = () => {
     const { address } = useAccount();
     const [offers, setOffers] = useState<any[]>([]);
-
+    // const { loading, error, nft } = useNft(
+    //     '0xd07dc4262bcdbf85190c01c996b4c06a461d2430', // NFT contract address
+    //     '90473', // token ID
+    // );
     React.useEffect(() => {
         if (!address) return;
-        console.log('useEffect');
+
         const getOffers = async () => {
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
-            console.log('offers start');
+
             const offers = await contract.getOffers();
+            const loans = await contract.getLoans();
+            console.log(loans);
             setOffers(offers);
-            console.log(offers, 'offers');
         };
         getOffers();
     }, []);
 
-    if (offers.length) {
-        const { TokenValuation } = offers[0];
-        console.log(TokenValuation.toString());
-    }
-    console.log(offers[0]);
     return (
         <div className="px-[120px] ">
             <div className=" flex mb-4">
@@ -53,10 +53,30 @@ const Lend = () => {
                 </div>
             </div>
             <div className="space-y-[25px]">
-                <LendItem src={img1} loanAmount={0.6} APR={20} duration={30} />
-                <LendItem src={img2} loanAmount={0.6} APR={10} duration={60} />
-                <LendItem src={img3} loanAmount={0.6} APR={15} duration={180} />
-                <LendItem src={img4} loanAmount={0.6} APR={20} duration={90} />
+                {offers.length
+                    ? offers.map((offer) => {
+                          const duration = Number(offer['duration'].toString()) / 86400;
+                          const apr = Number(offer['interestRate'].toString());
+                          const loanValue = Number(ethers.utils.formatEther(offer['loanValue']));
+                          const tokenValuation = Number(
+                              ethers.utils.formatEther(offer['tokenValuation']),
+                          );
+                          const tokenId = Number(offer['tokenId'].toString());
+                          const nftAddress = offer['nftAddress'];
+
+                          return (
+                              <LendItem
+                                  key={`${nftAddress}/${tokenId}`}
+                                  src={img1}
+                                  loanAmount={loanValue}
+                                  APR={apr}
+                                  duration={duration}
+                                  nftAddress={nftAddress}
+                                  tokenId={tokenId}
+                              />
+                          );
+                      })
+                    : null}
             </div>
         </div>
     );

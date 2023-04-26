@@ -2,19 +2,33 @@ import Image from 'next/image';
 import React, { FC, useEffect, useState } from 'react';
 import Counter from './Counter';
 import Button from './Button';
+import axios from 'axios';
+import { useQuery } from 'react-query';
+import { useNft } from 'use-nft';
 
 export interface LendItemProps {
     src: any;
     loanAmount: number;
     APR: number;
     duration: number;
+    nftAddress: string;
+    tokenId: number;
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    const { src, loanAmount, APR, duration } = props;
+    const { src, loanAmount, APR, duration, nftAddress, tokenId } = props;
     const [openCounterMenu, setOpenCounterMenu] = useState(false);
     const [openAcceptMenu, setOpenAcceptMenu] = useState(false);
+    const [firstSrc, setFirstSrc] = useState(false);
 
+    const [nftSrc, setNftSrc] = useState(src);
+
+    const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
+    useEffect(() => {
+        if (nft) {
+            setNftSrc(nft.image);
+        }
+    }, [nft]);
     const handleClick = (event: React.MouseEvent<HTMLInputElement>) => {
         const target = event.target as HTMLInputElement;
         if (target.checked) {
@@ -36,7 +50,7 @@ const LendItem: FC<LendItemProps> = (props) => {
         <>
             <div className="flex w-full ">
                 <div className="w-[60%] flex">
-                    <Image src={src} alt={''} width={150} height={150} />
+                    <Image src={nftSrc} alt={''} width={150} height={150} />
                     <div className="flex flex-col justify-between py-[10px] ml-[40px]">
                         <h2>Loan Amount: {loanAmount} WETH</h2>
                         <h2>Duration: {duration} days</h2>

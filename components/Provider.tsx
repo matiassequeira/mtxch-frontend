@@ -5,6 +5,8 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { goerli } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { NftProvider } from 'use-nft';
+import { getDefaultProvider } from 'ethers';
 
 const projectId = '6b8bb11f0139a5d4e9e753fc752d7ac6';
 const chains = [goerli];
@@ -15,7 +17,9 @@ const wagmiClient = createClient({
     connectors: w3mConnectors({ version: 1, chains, projectId }),
     provider,
 });
-
+const ethersConfig = {
+    provider: getDefaultProvider('https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6'),
+};
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
@@ -29,12 +33,14 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     }, []);
     return (
         <QueryClientProvider client={queryClient}>
-            <UserContext.Provider
-                value={{ walletConnected, setWalletConnected, userAddress, setUserAddress }}>
-                {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
+            <NftProvider fetcher={['ethers', ethersConfig]}>
+                <UserContext.Provider
+                    value={{ walletConnected, setWalletConnected, userAddress, setUserAddress }}>
+                    {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
 
-                <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-            </UserContext.Provider>
+                    <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+                </UserContext.Provider>
+            </NftProvider>
         </QueryClientProvider>
     );
 };

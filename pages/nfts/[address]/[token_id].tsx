@@ -38,8 +38,6 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
     const { nftData } = props;
     const { image_url, token_id, asset_contract } = nftData;
 
-    const { name, address: nftAddress } = asset_contract;
-
     const nftOwnerAddress = nftData.top_ownerships[0].owner.address;
     const slug = nftData.collection.slug;
 
@@ -49,7 +47,8 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
         () => axios.get(`https://testnets-api.opensea.io/api/v1/collection/${slug}`),
         { keepPreviousData: true, retry: true, retryDelay: 1000 },
     );
-
+    if (!asset_contract) return <>Refresh Page</>;
+    const { name, address: nftAddress } = asset_contract;
     const floorPrice = data?.data?.collection?.stats.floor_price;
 
     const listNft = (data: {
@@ -83,7 +82,6 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
         const makeOffer = async () => {
             const signer = provider.getSigner();
             const contract = new ethers.Contract(nftAddress, metaxchgAbi, signer);
-            console.log(nftAddress);
 
             const gasPrice = await provider.getGasPrice(); // Get the current gas price
             const gasLimit = 300000;
@@ -102,8 +100,6 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
 
         makeOffer();
     };
-
-    if (!asset_contract) return <>Refresh Page</>;
 
     if (address?.toLowerCase() !== nftOwnerAddress.toLowerCase())
         return <div className="text-center">This is not your NFT</div>;
