@@ -17,8 +17,7 @@ export interface Collection {}
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    console.log('window');
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -38,8 +37,7 @@ export const getServerSideProps = async (context: any) => {
 const LoanNft = (props: { nftData: NftItemInterface }) => {
     const { nftData } = props;
     const { image_url, token_id, asset_contract } = nftData;
-    console.log(asset_contract);
-    if (!asset_contract) return;
+    if (!asset_contract) return null;
     const { name, address } = asset_contract;
 
     const nftOwnerAddress = nftData.top_ownerships[0].owner.address;

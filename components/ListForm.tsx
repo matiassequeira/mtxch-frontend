@@ -21,10 +21,6 @@ interface ListFormProps {
 
 const ListForm = (props: ListFormProps) => {
     const { listNft } = props;
-    // const collectionAddress = asset_contract.address;
-    // const { address } = useAccount();
-
-    // if (!address) return null;
 
     const {
         register,
@@ -72,7 +68,6 @@ const ListForm = (props: ListFormProps) => {
                                 required: 'Value is required',
                                 valueAsNumber: true,
                                 min: { value: 0, message: 'Value should be more than 0' },
-                                value: 1.5,
                             })}
                             placeholder="Token Valuation"
                             className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
@@ -92,7 +87,6 @@ const ListForm = (props: ListFormProps) => {
                                 required: 'Value is required',
                                 valueAsNumber: true,
                                 min: { value: 0, message: 'Value should be more than 0' },
-                                value: 1,
                             })}
                             placeholder="Loan Amount"
                             className=" text-[20px] border-[2px] rounded-l-md border-r-0 border-solid border-black pl-2 w-[200px] h-[45px]"
@@ -110,7 +104,6 @@ const ListForm = (props: ListFormProps) => {
                         <input
                             {...register('APR', {
                                 required: 'Value is required',
-                                value: 20,
                                 valueAsNumber: true,
                                 min: { value: 0, message: 'Value should between 0 and 100' },
                                 max: { value: 100, message: 'Value should between 0 and 100' },
@@ -141,7 +134,6 @@ const ListForm = (props: ListFormProps) => {
                         <input
                             {...register('InjAddress', {
                                 required: 'Value is required',
-                                value: 'inj1jr394skmmly2ufnvdqrx6ap7m7qfy9g3qhm9fm',
                             })}
                             placeholder="Your Injective Address"
                             className=" text-[20px] border-[2px] rounded-md border-solid border-black pl-2 w-[280px] h-[45px]"

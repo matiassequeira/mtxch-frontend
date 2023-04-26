@@ -27,7 +27,6 @@ const CounterForm = ({ closeMenu }: { closeMenu: () => void }) => {
             setError('TokenValuation', { type: 'NaN', message: 'Only numbers are eligible' });
             return;
         }
-        console.log(data);
         closeMenu();
         // reset();
     };
