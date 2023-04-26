@@ -12,10 +12,6 @@ const Loans = () => {
             <div className=" flex mb-4">
                 <div className="w-[50%] space-y-[25px]">
                     <h1 className="text-center font-bold">Loan Request</h1>
-                    <LoanRequest src={img1} loanAmount={0.6} APR={25} duration={60} />
-                    <LoanRequest src={img2} loanAmount={0.6} APR={30} duration={30} />
-                    <LoanRequest src={img3} loanAmount={0.6} APR={10} duration={30} />
-                    <LoanRequest src={img4} loanAmount={0.6} APR={8} duration={60} />
                 </div>
                 <div className="w-[50%] space-y-[25px]">
                     <h1 className="font-bold">Active Loans</h1>
