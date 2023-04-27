@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
-import Header from '@component/components/Header';
 import punk1 from '../public/punk1.png';
 import punk2 from '../public/punk2.png';
 import punk3 from '../public/punk3.png';
@@ -8,7 +7,6 @@ import punk4 from '../public/punk4.png';
 import Button from '@component/components/Button';
 import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
-import logo from '../public/injective.png';
 import logoBlack from '../public/injectiveblack.svg';
 
 export default function Home() {
@@ -44,24 +42,28 @@ export default function Home() {
                         alt={''}
                         sizes="(min-width: 1024px) 200px,
               (max-width: 1024) 100px"
+                        placeholder="blur"
                     />
                     <Image
                         src={punk2}
                         alt={''}
                         sizes="(min-width: 1024px) 200px,
               (max-width: 1024) 100px"
+                        placeholder="blur"
                     />
                     <Image
                         src={punk3}
                         alt={''}
                         sizes="(min-width: 1024px) 200px,
               (max-width: 1024) 100px"
+                        placeholder="blur"
                     />
                     <Image
                         src={punk4}
                         alt={''}
                         sizes="(min-width: 1024px) 200px,
               (max-width: 1024) 100px"
+                        placeholder="blur"
                     />
                 </div>
                 <div className="flex space-x-[15px] md:hidden ">

@@ -28,6 +28,13 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     const [walletConnected, setWalletConnected] = useState(false);
     const [userAddress, setUserAddress] = useState('');
     const metaxchgAddress = '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629';
+    const allowedCollections = [
+        '0xFa97Df129fE2FfDFd63bc3F245dd769f52742Bad',
+        '0x3775060CB5F84A3525a9a07c703B565228CcCA16',
+    ]
+        .join(',,,')
+        .toLowerCase()
+        .split(',,,');
     useEffect(() => {
         setReady(true);
     }, []);
@@ -41,6 +48,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                         userAddress,
                         setUserAddress,
                         metaxchgAddress,
+                        allowedCollections,
                     }}>
                     {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
 

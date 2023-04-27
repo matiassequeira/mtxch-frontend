@@ -4,7 +4,8 @@ export interface UserContextType {
     userAddress: string | null;
     setWalletConnected: (arg: boolean) => void;
     setUserAddress: (arg: string) => void;
-    metaxchgAddress: string;
+    metaxchgAddress: `0x${string}`;
+    allowedCollections: string[];
 }
 
 const UserContext = createContext<UserContextType | null>(null);

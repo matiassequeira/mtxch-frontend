@@ -45,8 +45,6 @@ const ListForm = (props: ListFormProps) => {
             });
             return;
         }
-
-        // alert('You have successfully list your NFT');
         listNft(data);
         // reset();
     };

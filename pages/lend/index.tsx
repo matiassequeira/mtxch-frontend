@@ -2,15 +2,27 @@ import LendItem from '@component/components/LendItem';
 import React, { useContext, useState } from 'react';
 import img1 from '../../public/nftitem1.png';
 import { abi as metaxchgAbi } from '../../contracts/metaxchg.json';
-import { ethers } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 import UserContext, { UserContextType } from '@component/components/UserContext';
 import WalletNotConnected from '@component/components/WalletNotConnected';
 
+export interface offer {
+    borrower: `0x${string}`;
+    destinationAddress: string;
+    duration: number;
+    interestRate: number;
+    isActive: boolean;
+    loanValue: BigNumberish;
+    nftAddress: string;
+    tokenFloorPrice: BigNumberish;
+    tokenId: BigNumberish;
+    tokenValuation: BigNumberish;
+}
+
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    console.log('window');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -20,7 +32,7 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 const Lend = () => {
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
-    const [offers, setOffers] = useState<any[]>([]);
+    const [offers, setOffers] = useState<offer[]>([]);
 
     React.useEffect(() => {
         if (!address) return;
@@ -52,13 +64,18 @@ const Lend = () => {
             <div className="space-y-[25px]">
                 {offers.length
                     ? offers.map((offer, index) => {
-                          const duration = Number(offer['duration'].toString()) / 86400;
-                          const apr = Number(offer['interestRate'].toString());
+                          const isActive = offer['isActive'];
+                          if (!isActive) return null;
+                          const duration = offer['duration'] / 86400;
+                          const apr = offer['interestRate'];
+
                           const loanValue = Number(ethers.utils.formatEther(offer['loanValue']));
                           const tokenValuation = Number(
                               ethers.utils.formatEther(offer['tokenValuation']),
                           );
+
                           const tokenId = Number(offer['tokenId'].toString());
+
                           const nftAddress = offer['nftAddress'];
 
                           return (

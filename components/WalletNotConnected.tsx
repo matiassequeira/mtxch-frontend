@@ -1,7 +1,4 @@
 import React from 'react';
-import Header from './Header';
-import Image from 'next/image';
-import punk1 from '../public/punk1.png';
 
 const WalletNotConnected = () => {
     return (

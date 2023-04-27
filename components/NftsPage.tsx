@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Header from './Header';
+import React, { useContext } from 'react';
 import NftItem from './NftItem';
 import { useAccount } from 'wagmi';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import UserContext, { UserContextType } from './UserContext';
 
 export interface NftItemInterface {
     id: number;
@@ -28,12 +28,16 @@ export interface NftItemInterface {
 
 const NftsPage = () => {
     const { address } = useAccount();
+    const { allowedCollections } = useContext(UserContext) as UserContextType;
     const { data, isLoading, isError } = useQuery(
         ['nfts', address],
         () => axios.get(`https://testnets-api.opensea.io/api/v1/assets?owner=${address}`),
         { keepPreviousData: true, retry: true, retryDelay: 1000 },
     );
-    const assets: NftItemInterface[] = data?.data.assets;
+    const assets: NftItemInterface[] = data?.data.assets.filter((asset: NftItemInterface) => {
+        if (!allowedCollections.includes(asset.asset_contract.address.toLowerCase())) return;
+        return asset;
+    });
 
     if (!address) return null;
 
@@ -58,7 +62,9 @@ const NftsPage = () => {
                     </div>
                 </div>
             ) : (
-                <div className="px-[120px]">You have no NFTs</div>
+                <div className="w-full flex flex-col items-center justify-center mt-[100px]">
+                    <h1>You have no NFTs from allowed collections</h1>
+                </div>
             )}
         </>
     );

@@ -2,14 +2,21 @@ import React, { useContext, useState } from 'react';
 import img1 from '../../public/nftitem1.png';
 import LoanActive from '@component/components/LoanActive';
 import { abi as metaxchgAbi } from '../../contracts/metaxchg.json';
-import { ethers } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 import UserContext, { UserContextType } from '@component/components/UserContext';
+import { offer } from '../lend';
+
+export interface loan {
+    initialDate: BigNumberish;
+    isActive: boolean;
+    lender: `0x${string}`;
+    offer: offer;
+}
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    console.log('window');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -19,7 +26,7 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 const Loans = () => {
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
-    const [loans, setLoans] = useState([]);
+    const [loans, setLoans] = useState<loan[]>([]);
     React.useEffect(() => {
         const getOffers = async () => {
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
@@ -27,8 +34,6 @@ const Loans = () => {
             try {
                 const loans = await contract.getLoans();
                 setLoans(loans);
-
-                console.log(loans, 'loans');
             } catch (error) {
                 console.error(error);
             }
@@ -42,7 +47,7 @@ const Loans = () => {
                 <div className="space-y-[25px]">
                     <h1 className="font-bold">Active Loans</h1>
                     {loans.length
-                        ? loans.map((loan: any, index) => {
+                        ? loans.map((loan, index) => {
                               const offer = loan['offer'];
                               const duration = Number(offer['duration'].toString()) / 86400;
                               const apr = Number(offer['interestRate'].toString());

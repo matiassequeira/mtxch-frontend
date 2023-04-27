@@ -1,15 +1,11 @@
-import img1 from '../../../public/nftitem1.png';
 import ListForm from '@component/components/ListForm';
-import { NftItemInterface } from '@component/components/NftsPage';
-import axios from 'axios';
-import Image from 'next/image';
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { abi as metaxchgAbi } from '../../../contracts/metaxchg.json';
 import { ethers } from 'ethers';
 import { prependNullBytes } from '@component/utils/prependNullBytes';
 import UserContext, { UserContextType } from '@component/components/UserContext';
+import NftListItem from '@component/components/NftListItem';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -22,30 +18,14 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 
 export const getServerSideProps = async (context: any) => {
     const { address, token_id } = context.params;
-    const response = await fetch(
-        `https://testnets-api.opensea.io/api/v1/asset/${address}/${token_id}`,
-    );
-    const data = await response.json();
-
-    return { props: { nftData: data } };
+    return { props: { nftAddress: address, token_id: token_id } };
 };
 
-const LoanNft = (props: { nftData: NftItemInterface }) => {
-    const { nftData } = props;
-    const { image_url, token_id, asset_contract } = nftData;
-    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
-    const nftOwnerAddress = nftData.top_ownerships[0].owner.address;
-    const slug = nftData.collection.slug;
-
+const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
+    const { nftAddress, token_id } = props;
+    const { allowedCollections } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
-    const { data }: any = useQuery(
-        `collection/${slug}`,
-        () => axios.get(`https://testnets-api.opensea.io/api/v1/collection/${slug}`),
-        { keepPreviousData: true, retry: true, retryDelay: 1000 },
-    );
-    if (!asset_contract) return <>Refresh Page</>;
-    const { name, address: nftAddress } = asset_contract;
-    const floorPrice = data?.data?.collection?.stats.floor_price;
+    const [isOwner, setIsOwner] = useState(true);
 
     const listNft = (data: {
         LoanAmount: number;
@@ -54,9 +34,10 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
         APR: number;
         InjAddress: string;
     }) => {
+        if (!address) return;
         const { TokenValuation, LoanAmount, Duration, APR } = data;
 
-        const destinationAddress = prependNullBytes(metaxchgAddress);
+        const destinationAddress = prependNullBytes(address);
 
         const weiTokenValuation = ethers.utils.parseUnits(TokenValuation.toString(), 18);
         const weiLoanValue = ethers.utils.parseUnits(LoanAmount.toString(), 18);
@@ -80,22 +61,29 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
             );
 
             const check = await offer.estimateGas();
-            console.log(check);
         };
 
         makeOffer();
     };
 
-    if (address?.toLowerCase() !== nftOwnerAddress.toLowerCase())
-        return <div className="text-center">This is not your NFT</div>;
+    if (!allowedCollections.includes(nftAddress.toLowerCase()))
+        return (
+            <div className="w-full flex flex-col items-center justify-center mt-[100px]">
+                <h1>This NFT is not supported</h1>
+            </div>
+        );
+
+    if (!isOwner)
+        return (
+            <div className="w-full flex flex-col items-center justify-center mt-[100px]">
+                <h1>You are not an owner or NFT does not exist</h1>
+            </div>
+        );
+
     return (
         <div className="px-[120px] flex mb-3">
             <div className=" w-[55%]">
-                <Image src={image_url || img1} alt="" width={400} height={400} />
-                <h1>
-                    {name} #{token_id}
-                </h1>
-                <h1>Floor: {floorPrice}ETH</h1>
+                <NftListItem nftAddress={nftAddress} token_id={token_id} setIsOwner={setIsOwner} />
             </div>
 
             <ListForm listNft={listNft} />
