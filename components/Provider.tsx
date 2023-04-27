@@ -27,7 +27,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     const [ready, setReady] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
     const [userAddress, setUserAddress] = useState('');
-
+    const metaxchgAddress = '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629';
     useEffect(() => {
         setReady(true);
     }, []);
@@ -35,7 +35,13 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         <QueryClientProvider client={queryClient}>
             <NftProvider fetcher={['ethers', ethersConfig]}>
                 <UserContext.Provider
-                    value={{ walletConnected, setWalletConnected, userAddress, setUserAddress }}>
+                    value={{
+                        walletConnected,
+                        setWalletConnected,
+                        userAddress,
+                        setUserAddress,
+                        metaxchgAddress,
+                    }}>
                     {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
 
                     <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />

@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import React, { FC, useEffect, useState } from 'react';
-import Counter from './Counter';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import Button from './Button';
-import axios from 'axios';
-import { useQuery } from 'react-query';
 import { useNft } from 'use-nft';
+import { ethers } from 'ethers';
+import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
+import UserContext, { UserContextType } from './UserContext';
 
 export interface LendItemProps {
     src: any;
@@ -13,13 +13,21 @@ export interface LendItemProps {
     duration: number;
     nftAddress: string;
     tokenId: number;
+    index: number;
+}
+
+let provider: any;
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+} else {
+    provider = new ethers.providers.JsonRpcProvider(
+        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    );
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    const { src, loanAmount, APR, duration, nftAddress, tokenId } = props;
-    const [openCounterMenu, setOpenCounterMenu] = useState(false);
-    const [openAcceptMenu, setOpenAcceptMenu] = useState(false);
-
+    const { src, loanAmount, APR, duration, nftAddress, tokenId, index } = props;
+    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
 
     const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
@@ -28,23 +36,13 @@ const LendItem: FC<LendItemProps> = (props) => {
             setNftSrc(nft.image);
         }
     }, [nft]);
-    const handleClick = (event: React.MouseEvent<HTMLInputElement>) => {
-        const target = event.target as HTMLInputElement;
-        if (target.checked) {
-            if (target.name === 'counter') setOpenCounterMenu(true);
-            else setOpenAcceptMenu(true);
-        }
-    };
 
-    const notifiOnClick = () => {
-        alert('You have accepted the offer!');
+    const acceptOffer = async () => {
+        const signer = provider.getSigner();
+        const gasPrice = await provider.getGasPrice(); // Get the current gas price
+        const gasLimit = 300000;
+        const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, signer);
     };
-
-    const closeMenu = () => {
-        setOpenCounterMenu(false);
-        setOpenAcceptMenu(false);
-    };
-
     return (
         <>
             <div className="flex w-full ">
@@ -57,28 +55,9 @@ const LendItem: FC<LendItemProps> = (props) => {
                     </div>
                 </div>
                 <div className="flex items-center">
-                    <Button color="black" text="Accept" onClick={notifiOnClick} />
-                    {/* <div>
-                        <input
-                            className="w-[15px] h-[15px] mr-2"
-                            type="checkbox"
-                            name="counter"
-                            onClick={handleClick}
-                        />
-                        <label htmlFor="counter">Counter</label>
-                    </div>
-                    <div>
-                        <input
-                            className="w-[15px] h-[15px] mr-2"
-                            type="checkbox"
-                            name="accept"
-                            onClick={handleClick}
-                        />
-                        <label htmlFor="accept">Accept</label>
-                    </div> */}
+                    <Button color="black" text="Accept" onClick={acceptOffer} />
                 </div>
             </div>
-            {/* {openCounterMenu ? <Counter closeMenu={closeMenu} {...props} /> : null} */}
         </>
     );
 };

@@ -1,19 +1,15 @@
-import Button from '@component/components/Button';
+import img1 from '../../../public/nftitem1.png';
 import ListForm from '@component/components/ListForm';
 import { NftItemInterface } from '@component/components/NftsPage';
 import axios from 'axios';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
-// import ERC721 from '../../../contracts/ERC721.json';
-import metaxchg from '../../../contracts/metaxchg.json';
+import { abi as metaxchgAbi } from '../../../contracts/metaxchg.json';
 import { ethers } from 'ethers';
-
-// const erc721Abi = ERC721.abi;
-const metaxchgAbi = metaxchg.abi;
-
-export interface Collection {}
+import { prependNullBytes } from '@component/utils/prependNullBytes';
+import UserContext, { UserContextType } from '@component/components/UserContext';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -37,7 +33,7 @@ export const getServerSideProps = async (context: any) => {
 const LoanNft = (props: { nftData: NftItemInterface }) => {
     const { nftData } = props;
     const { image_url, token_id, asset_contract } = nftData;
-
+    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const nftOwnerAddress = nftData.top_ownerships[0].owner.address;
     const slug = nftData.collection.slug;
 
@@ -59,24 +55,10 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
         InjAddress: string;
     }) => {
         const { TokenValuation, LoanAmount, Duration, APR } = data;
-        function prependNullBytes(address: string) {
-            // Remove the '0x' prefix if it exists
-            const cleanedAddress = address.startsWith('0x') ? address.slice(2) : address;
 
-            // Check if the cleaned address is a valid EVM address
-            if (cleanedAddress.length !== 40) {
-                throw new Error('Invalid EVM address');
-            }
-
-            // Prepend 12 null bytes (24 zeros) to the cleaned address
-            const paddedAddress = '0x' + '0'.repeat(24) + cleanedAddress;
-
-            return paddedAddress;
-        }
-        const destinationAddress = prependNullBytes('0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629');
+        const destinationAddress = prependNullBytes(metaxchgAddress);
 
         const weiTokenValuation = ethers.utils.parseUnits(TokenValuation.toString(), 18);
-
         const weiLoanValue = ethers.utils.parseUnits(LoanAmount.toString(), 18);
 
         const makeOffer = async () => {
@@ -96,6 +78,9 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
                 APR,
                 { gasLimit, gasPrice }, // Pass the gas limit and gas price as options to the contract method
             );
+
+            const check = await offer.estimateGas();
+            console.log(check);
         };
 
         makeOffer();
@@ -106,17 +91,11 @@ const LoanNft = (props: { nftData: NftItemInterface }) => {
     return (
         <div className="px-[120px] flex mb-3">
             <div className=" w-[55%]">
-                <Image
-                    src={image_url || 'https://via.placeholder.com/300'}
-                    alt=""
-                    width={400}
-                    height={400}
-                />
+                <Image src={image_url || img1} alt="" width={400} height={400} />
                 <h1>
                     {name} #{token_id}
                 </h1>
                 <h1>Floor: {floorPrice}ETH</h1>
-                {/* <h1>Max Loan: {maxFloat.toFixed(3)}ETH</h1> */}
             </div>
 
             <ListForm listNft={listNft} />

@@ -1,5 +1,6 @@
-import Image from 'next/image';
 import React from 'react';
+import img1 from '../public/nftitem1.png';
+import Image from 'next/image';
 import { NftItemInterface } from './NftsPage';
 import Link from 'next/link';
 
@@ -9,7 +10,7 @@ const NftItem = (item: NftItemInterface) => {
             <div className="overflow-hidden w-[230px] h-[230px]">
                 <Link href={`/nfts/${item.asset_contract.address}/${item.token_id}`}>
                     <Image
-                        src={item.image_url || 'https://via.placeholder.com/300'}
+                        src={item.image_url || img1}
                         alt={''}
                         width={230}
                         height={230}
