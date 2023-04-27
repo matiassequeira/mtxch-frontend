@@ -5,6 +5,7 @@ import Button from './Button';
 import Link from 'next/link';
 import UserContext, { UserContextType } from './UserContext';
 import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
 export default function WalletConnect() {
     const [loading, setLoading] = useState(false);
     const { open } = useWeb3Modal();
@@ -29,7 +30,23 @@ export default function WalletConnect() {
             onOpen();
         }
     }
-
+    useEffect(() => {
+        if (!isConnected) return;
+        const requestSwitchNetwork = async () => {
+            const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+            const network = await provider.getNetwork();
+            if (window === undefined || window.ethereum === undefined) return;
+            if (network.name !== 'goerli') {
+                // Ask user to switch to Goerli network
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x5' }], // Goerli chain ID
+                });
+                console.log('Please switch to the Goerli network');
+            }
+        };
+        requestSwitchNetwork();
+    }, [pathname]);
     useEffect(() => {
         isConnected ? setWalletConnected(true) : setWalletConnected(false);
         if (isConnected && account.address) {
