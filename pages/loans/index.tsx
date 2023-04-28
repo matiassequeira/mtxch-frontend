@@ -39,7 +39,7 @@ const Loans = () => {
             }
         };
         getOffers();
-    }, [address]);
+    }, [address, metaxchgAddress]);
 
     return (
         <div className="px-[100px] ">
@@ -48,6 +48,7 @@ const Loans = () => {
                     <h1 className="font-bold">Active Loans</h1>
                     {loans.length
                         ? loans.map((loan, index) => {
+                              console.log(loan);
                               const offer = loan['offer'];
                               const duration = Number(offer['duration'].toString()) / 86400;
                               const apr = Number(offer['interestRate'].toString());

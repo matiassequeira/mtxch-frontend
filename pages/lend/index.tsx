@@ -47,7 +47,7 @@ const Lend = () => {
             }
         };
         getOffers();
-    }, [address]);
+    }, [address, metaxchgAddress]);
 
     if (!address) return <WalletNotConnected />;
 

@@ -48,7 +48,7 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
             }
         };
         getOffers();
-    }, []);
+    }, [metaxchgAddress, nftAddress]);
 
     return (
         <>
