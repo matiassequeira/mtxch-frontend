@@ -121,7 +121,7 @@ const ListForm = (props: ListFormProps) => {
                         <option value={180}>180 days</option>
                     </select>
                 </label>
-                <label>
+                {/* <label>
                     <div className="text-[24px] flex">
                         <input
                             {...register('InjAddress', {
@@ -134,7 +134,7 @@ const ListForm = (props: ListFormProps) => {
                     <p className="text-[#FF0000] text-[14px]">
                         {errors?.InjAddress && errors.InjAddress.message}
                     </p>
-                </label>
+                </label> */}
 
                 <input
                     value="List"

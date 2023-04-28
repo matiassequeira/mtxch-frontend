@@ -28,6 +28,11 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
     const { address } = useAccount();
     const { loading, error, nft } = useNft(nftAddress, token_id.toString());
 
+    const name =
+        nftAddress.toLowerCase() === '0xfa97df129fe2ffdfd63bc3f245dd769f52742bad'
+            ? 'Bored Ape Yacht Club'
+            : 'CRYPTOPUNKS';
+
     if (!loading && nft?.owner !== address) {
         setIsOwner(false);
     }
@@ -48,7 +53,7 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
     return (
         <>
             <Image src={nft?.image || img1} onLoad={() => {}} alt="" width={400} height={400} />
-            <h1>{nft?.name}</h1>
+            <h1>{nft?.name || name + ` #${token_id}`}</h1>
             <h1>Floor: {floorPrice ? <>{floorPrice}ETH</> : <>???</>}</h1>
         </>
     );

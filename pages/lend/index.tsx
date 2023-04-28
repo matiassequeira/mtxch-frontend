@@ -77,12 +77,12 @@ const Lend = () => {
                           const tokenId = Number(offer['tokenId'].toString());
 
                           const nftAddress = offer['nftAddress'];
-                          console.log(offer);
+
                           return (
                               <LendItem
                                   key={`lend/${nftAddress}/${tokenId}`}
                                   src={img1}
-                                  loanAmount={tokenValuation}
+                                  tokenValuation={tokenValuation}
                                   APR={apr}
                                   duration={duration}
                                   nftAddress={nftAddress}

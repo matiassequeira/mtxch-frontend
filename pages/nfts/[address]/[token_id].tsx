@@ -24,7 +24,7 @@ export const getServerSideProps = async (context: any) => {
 
 const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { nftAddress, token_id } = props;
-    const { allowedCollections } = useContext(UserContext) as UserContextType;
+    const { allowedCollections, metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [isOwner, setIsOwner] = useState(true);
 
@@ -45,11 +45,7 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
         const makeOffer = async () => {
             const signer = provider.getSigner();
             const tokenContract = new ethers.Contract(nftAddress, erc721Abi, provider);
-            const contract = new ethers.Contract(
-                '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
-                metaxchgAbi,
-                provider,
-            );
+            const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
 
             const owner = await tokenContract.ownerOf(token_id);
             const signerAddress = await signer.getAddress();
@@ -58,23 +54,17 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
                 throw new Error('You must be the owner of the token to perform this operation');
             }
 
-            const isApproved = await tokenContract.isApprovedForAll(
-                owner,
-                '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
-            );
+            const isApproved = await tokenContract.isApprovedForAll(owner, metaxchgAddress);
             if (!isApproved) {
                 const approvedAddress = await tokenContract.getApproved(token_id);
-                if (
-                    approvedAddress.toLowerCase() !==
-                    '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629'.toLowerCase()
-                ) {
+                if (approvedAddress.toLowerCase() !== metaxchgAddress.toLowerCase()) {
                     await tokenContract.connect(signer).approve(contract.address, token_id);
                 }
             }
 
             const gasLimit = 300000;
             const transaction = {
-                to: '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
+                to: metaxchgAddress,
                 data: contract.interface.encodeFunctionData('makeOffer', [
                     nftAddress,
                     token_id,

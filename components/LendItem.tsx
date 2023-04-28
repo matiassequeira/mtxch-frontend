@@ -4,11 +4,12 @@ import Button from './Button';
 import { useNft } from 'use-nft';
 import { ethers } from 'ethers';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
+import { erc20ABI } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
 
 export interface LendItemProps {
     src: any;
-    loanAmount: number;
+    tokenValuation: number;
     APR: number;
     duration: number;
     nftAddress: string;
@@ -26,8 +27,8 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    const { src, loanAmount, APR, duration, nftAddress, tokenId, index } = props;
-    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
+    const { src, tokenValuation, APR, duration, nftAddress, tokenId, index } = props;
+    const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
 
     const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
@@ -40,9 +41,32 @@ const LendItem: FC<LendItemProps> = (props) => {
 
     const acceptOffer = async () => {
         const signer = provider.getSigner();
-        const gasPrice = await provider.getGasPrice(); // Get the current gas price
-        const gasLimit = 300000;
+        const signerAddress = signer.getAddress();
+
         const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, signer);
+        const tokenContract = new ethers.Contract(wethAddress, erc20ABI, signer);
+
+        const amount = ethers.utils.parseUnits('1000000000', 18);
+
+        const isApproved = await tokenContract.allowance(signerAddress, metaxchgAddress);
+        if (!isApproved) {
+            const approveTx = {
+                to: wethAddress,
+                data: tokenContract.interface.encodeFunctionData('approve', [
+                    metaxchgAddress,
+                    amount,
+                ]),
+            };
+            const approveTxResponse = await signer.sendTransaction(approveTx);
+        }
+
+        const gasLimit = 500000;
+        const transaction = {
+            to: metaxchgAddress,
+            data: contract.interface.encodeFunctionData('acceptOffer', [index]),
+            gasLimit: gasLimit,
+        };
+        const transactionResponse = await signer.sendTransaction(transaction);
     };
     return (
         <>
@@ -50,7 +74,7 @@ const LendItem: FC<LendItemProps> = (props) => {
                 <div className="w-[60%] flex">
                     <Image src={nftSrc} alt={''} width={150} height={150} />
                     <div className="flex flex-col justify-between py-[10px] ml-[40px]">
-                        <h2>Loan Amount: {loanAmount} WETH</h2>
+                        <h2>Loan Amount: {tokenValuation} WETH</h2>
                         <h2>Duration: {duration} days</h2>
                         <h2>APR: {APR.toFixed(1)}%</h2>
                     </div>
