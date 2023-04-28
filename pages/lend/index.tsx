@@ -52,7 +52,7 @@ const Lend = () => {
     if (!address) return <WalletNotConnected />;
 
     return (
-        <div className="px-[120px] ">
+        <div className="px-[120px] py-[20px]">
             <div className=" flex mb-4">
                 <div className="w-[60%]">
                     <h1 className="text-center font-bold">Requests</h1>
@@ -77,7 +77,7 @@ const Lend = () => {
                           const tokenId = Number(offer['tokenId'].toString());
 
                           const nftAddress = offer['nftAddress'];
-
+                          console.log(offer);
                           return (
                               <LendItem
                                   key={`lend/${nftAddress}/${tokenId}`}

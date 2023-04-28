@@ -2,6 +2,7 @@ import ListForm from '@component/components/ListForm';
 import React, { useContext, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { abi as metaxchgAbi } from '../../../contracts/metaxchg.json';
+import { abi as erc721Abi } from '../../../contracts/ERC721.json';
 import { ethers } from 'ethers';
 import { prependNullBytes } from '@component/utils/prependNullBytes';
 import UserContext, { UserContextType } from '@component/components/UserContext';
@@ -35,32 +36,57 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
         InjAddress: string;
     }) => {
         if (!address) return;
-        const { TokenValuation, LoanAmount, Duration, APR } = data;
-
+        const { TokenValuation, LoanAmount, APR } = data;
+        const Duration = Number(data.Duration) * 86400;
         const destinationAddress = prependNullBytes(address);
-
         const weiTokenValuation = ethers.utils.parseUnits(TokenValuation.toString(), 18);
         const weiLoanValue = ethers.utils.parseUnits(LoanAmount.toString(), 18);
 
         const makeOffer = async () => {
             const signer = provider.getSigner();
-            const contract = new ethers.Contract(nftAddress, metaxchgAbi, signer);
-
-            const gasPrice = await provider.getGasPrice(); // Get the current gas price
-            const gasLimit = 300000;
-
-            const offer = await contract.makeOffer(
-                nftAddress,
-                token_id,
-                weiTokenValuation.toString(),
-                weiLoanValue.toString(),
-                destinationAddress,
-                Number(Duration),
-                APR,
-                { gasLimit, gasPrice }, // Pass the gas limit and gas price as options to the contract method
+            const tokenContract = new ethers.Contract(nftAddress, erc721Abi, provider);
+            const contract = new ethers.Contract(
+                '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
+                metaxchgAbi,
+                provider,
             );
 
-            const check = await offer.estimateGas();
+            const owner = await tokenContract.ownerOf(token_id);
+            const signerAddress = await signer.getAddress();
+
+            if (owner !== signerAddress) {
+                throw new Error('You must be the owner of the token to perform this operation');
+            }
+
+            const isApproved = await tokenContract.isApprovedForAll(
+                owner,
+                '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
+            );
+            if (!isApproved) {
+                const approvedAddress = await tokenContract.getApproved(token_id);
+                if (
+                    approvedAddress.toLowerCase() !==
+                    '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629'.toLowerCase()
+                ) {
+                    await tokenContract.connect(signer).approve(contract.address, token_id);
+                }
+            }
+
+            const gasLimit = 300000;
+            const transaction = {
+                to: '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629',
+                data: contract.interface.encodeFunctionData('makeOffer', [
+                    nftAddress,
+                    token_id,
+                    weiTokenValuation.toString(),
+                    weiLoanValue.toString(),
+                    destinationAddress,
+                    Number(Duration),
+                    APR,
+                ]),
+                gasLimit: gasLimit,
+            };
+            const transactionResponse = await signer.sendTransaction(transaction);
         };
 
         makeOffer();

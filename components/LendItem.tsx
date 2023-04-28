@@ -35,6 +35,7 @@ const LendItem: FC<LendItemProps> = (props) => {
         if (nft) {
             setNftSrc(nft.image);
         }
+        console.log(nft);
     }, [nft]);
 
     const acceptOffer = async () => {
