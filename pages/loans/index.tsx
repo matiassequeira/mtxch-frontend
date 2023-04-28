@@ -60,17 +60,21 @@ const Loans = () => {
                               );
                               const tokenId = Number(offer['tokenId'].toString());
                               const nftAddress = offer['nftAddress'];
+                              const initialFloorPrice = Number(
+                                  ethers.utils.formatEther(offer['tokenFloorPrice']),
+                              ).toFixed(0);
 
                               return (
                                   <LoanActive
                                       key={`lend/${nftAddress}/${tokenId}`}
                                       src={img1}
-                                      loanAmount={tokenValuation}
+                                      tokenValuation={tokenValuation}
                                       APR={apr}
                                       duration={duration}
-                                      health={100}
                                       nftAddress={nftAddress}
                                       tokenId={tokenId}
+                                      initialFloorPrice={initialFloorPrice}
+                                      loanValue={loanValue}
                                   />
                               );
                           })
