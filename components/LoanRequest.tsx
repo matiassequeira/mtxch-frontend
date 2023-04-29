@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { LendItemProps } from './LendItem';
 import Image from 'next/image';
 import Button from './Button';
 import { ethers } from 'ethers';
 import UserContext, { UserContextType } from './UserContext';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
-
+import { useNft } from 'use-nft';
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -17,8 +17,11 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 }
 
 const LoanRequest = (props: LendItemProps) => {
-    const { src, tokenValuation, APR, duration, index } = props;
+    const { src, tokenValuation, APR, duration, index, nftAddress, tokenId } = props;
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
+
+    const [nftSrc, setNftSrc] = useState(src);
+    const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
 
     const cancelOffer = async () => {
         const signer = provider.getSigner();
@@ -34,10 +37,16 @@ const LoanRequest = (props: LendItemProps) => {
         const transactionResponse = await signer.sendTransaction(transaction);
     };
 
+    useEffect(() => {
+        if (nft) {
+            setNftSrc(nft.image);
+        }
+    }, [nft]);
+
     return (
         <div className="flex w-full justify-between">
             <div className="flex">
-                <Image src={src} alt={''} width={150} height={150} />
+                <Image src={nftSrc} alt={''} width={150} height={150} />
                 <div className="flex flex-col justify-between py-[10px] ml-[40px]">
                     <h2>Loan Amount: {tokenValuation} WETH</h2>
                     <h2>Duration: {duration} days</h2>

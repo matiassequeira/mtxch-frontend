@@ -32,6 +32,8 @@ const LoanActive = (props: LoanActiveProps) => {
 
     const [color, setColor] = useState('');
     const [health, setHealth] = useState('???');
+    const [nftSrc, setNftSrc] = useState(src);
+    const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
 
     useEffect(() => {
         if (!healthValue || !loanValue) return;
@@ -49,9 +51,6 @@ const LoanActive = (props: LoanActiveProps) => {
             setColor('text-[#008000]');
         }
     }, [healthValue, loanValue]);
-
-    const [nftSrc, setNftSrc] = useState(src);
-    const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
     useEffect(() => {
         if (nft) {
             setNftSrc(nft.image);
