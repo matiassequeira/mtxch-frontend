@@ -32,7 +32,7 @@ const LoanActive = (props: LoanActiveProps) => {
 
     const [color, setColor] = useState('');
     const [health, setHealth] = useState('???');
-    console.log(color);
+
     useEffect(() => {
         if (!healthValue || !loanValue) return;
         if (healthValue / loanValue < 1) {

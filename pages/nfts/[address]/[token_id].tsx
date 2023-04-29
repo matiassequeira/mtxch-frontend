@@ -7,12 +7,15 @@ import { ethers } from 'ethers';
 import { prependNullBytes } from '@component/utils/prependNullBytes';
 import UserContext, { UserContextType } from '@component/components/UserContext';
 import NftListItem from '@component/components/NftListItem';
+import { checkTxStatus } from '@component/utils/checkTxStatus';
+import { useRouter } from 'next/router';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
 } else {
     provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
     );
 }
@@ -27,6 +30,8 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { allowedCollections, metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [isOwner, setIsOwner] = useState(true);
+
+    const router = useRouter();
 
     const listNft = (data: {
         LoanAmount: number;
@@ -77,6 +82,11 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
                 gasLimit: gasLimit,
             };
             const transactionResponse = await signer.sendTransaction(transaction);
+
+            const success = await checkTxStatus(provider, transactionResponse.hash);
+            // IF SUCCESS REDIRECT TO BORROWER
+
+            if (success) router.push('/loans');
         };
 
         makeOffer();

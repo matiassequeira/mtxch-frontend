@@ -1,26 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import UserContext from './UserContext';
-import { Web3Modal } from '@web3modal/react';
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { goerli } from 'wagmi/chains';
+import { goerli, mainnet } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NftProvider } from 'use-nft';
 import { getDefaultProvider } from 'ethers';
 
+import { infuraProvider } from 'wagmi/providers/infura';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+
 const projectId = '6b8bb11f0139a5d4e9e753fc752d7ac6';
+
 const chains = [goerli];
 
-const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
+const { provider } = configureChains(
+    [goerli],
+    [infuraProvider({ apiKey: '<https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6>' })], // Get Infura apiKey at https://www.infura.io/
+);
+export const connector = new MetaMaskConnector({ chains });
 const wagmiClient = createClient({
     autoConnect: true,
-    connectors: w3mConnectors({ version: 1, chains, projectId }),
+    connectors: [connector],
+    provider: provider,
+});
+
+const client = createClient({
+    autoConnect: true,
+    connectors: [new MetaMaskConnector({ chains })],
     provider,
 });
+
 const ethersConfig = {
     provider: getDefaultProvider('https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6'),
 };
-const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
     const [queryClient] = useState(() => new QueryClient());
@@ -52,9 +65,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                         allowedCollections,
                         wethAddress,
                     }}>
-                    {ready ? <WagmiConfig client={wagmiClient}>{children}</WagmiConfig> : null}
-
-                    <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+                    {ready ? <WagmiConfig client={client}>{children}</WagmiConfig> : null}
                 </UserContext.Provider>
             </NftProvider>
         </QueryClientProvider>

@@ -4,7 +4,7 @@ import Button from './Button';
 import { useNft } from 'use-nft';
 import { ethers } from 'ethers';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
-import { erc20ABI } from 'wagmi';
+import { erc20ABI, useSwitchNetwork } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
 
 export interface LendItemProps {
@@ -15,6 +15,7 @@ export interface LendItemProps {
     nftAddress: string;
     tokenId: number;
     index: number;
+    loanValue: number;
 }
 
 let provider: any;
@@ -22,12 +23,13 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
 } else {
     provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
     );
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    const { src, tokenValuation, APR, duration, nftAddress, tokenId, index } = props;
+    const { src, tokenValuation, APR, duration, nftAddress, tokenId, index, loanValue } = props;
     const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
 
@@ -36,7 +38,6 @@ const LendItem: FC<LendItemProps> = (props) => {
         if (nft) {
             setNftSrc(nft.image);
         }
-        console.log(nft);
     }, [nft]);
 
     const acceptOffer = async () => {
@@ -49,6 +50,7 @@ const LendItem: FC<LendItemProps> = (props) => {
         const amount = ethers.utils.parseUnits('1000000000', 18);
 
         const isApproved = await tokenContract.allowance(signerAddress, metaxchgAddress);
+
         if (!isApproved) {
             const approveTx = {
                 to: wethAddress,
@@ -68,6 +70,7 @@ const LendItem: FC<LendItemProps> = (props) => {
         };
         const transactionResponse = await signer.sendTransaction(transaction);
     };
+
     return (
         <>
             <div className="flex w-full ">

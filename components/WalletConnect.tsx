@@ -1,16 +1,19 @@
-import { useWeb3Modal } from '@web3modal/react';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import Button from './Button';
 import Link from 'next/link';
 import UserContext, { UserContextType } from './UserContext';
 import { useRouter } from 'next/router';
+
+import { useConnect } from 'wagmi';
 import { ethers } from 'ethers';
+import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
+
 export default function WalletConnect() {
-    const [loading, setLoading] = useState(false);
-    const { open } = useWeb3Modal();
+    const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
     const { isConnected } = useAccount();
     const { disconnect } = useDisconnect();
+
     const label = isConnected ? 'Disconnect' : 'Connect Wallet';
     const account = useAccount();
     const { setWalletConnected, setUserAddress } = useContext(UserContext) as UserContextType;
@@ -18,9 +21,9 @@ export default function WalletConnect() {
     const route = useRouter();
     const { pathname } = route;
     async function onOpen() {
-        setLoading(true);
-        await open();
-        setLoading(false);
+        for (let connector of connectors) {
+            connect({ connector });
+        }
     }
 
     function onClick() {
@@ -30,23 +33,6 @@ export default function WalletConnect() {
             onOpen();
         }
     }
-    useEffect(() => {
-        if (!isConnected) return;
-        const requestSwitchNetwork = async () => {
-            const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-            const network = await provider.getNetwork();
-
-            if (window === undefined || window.ethereum === undefined) return;
-            if (network.name !== 'goerli') {
-                // Ask user to switch to Goerli network
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x5' }], // Goerli chain ID
-                });
-            }
-        };
-        requestSwitchNetwork();
-    }, [pathname, isConnected]);
     useEffect(() => {
         isConnected ? setWalletConnected(true) : setWalletConnected(false);
         if (isConnected && account.address) {
@@ -58,12 +44,17 @@ export default function WalletConnect() {
         }
     }, [isConnected, account, setUserAddress, setWalletConnected]);
 
+    useEffect(() => {
+        if (!isConnected) return;
+        requestSwitchNetwork();
+    }, [isConnected, pathname]);
+
     if (!isConnected)
         return (
             <Button
                 onClick={onClick}
-                disabled={loading}
-                text={loading ? 'Loading...' : label}
+                disabled={isLoading}
+                text={isLoading ? 'Connecting...' : label}
                 color="black"></Button>
         );
     return (
@@ -79,8 +70,8 @@ export default function WalletConnect() {
                         <div className="hidden sm:inline-block">
                             <Button
                                 onClick={onClick}
-                                disabled={loading}
-                                text={loading ? 'Loading...' : label}
+                                disabled={isLoading}
+                                text={isLoading ? 'Connecting...' : label}
                                 color="black"
                             />
                         </div>
@@ -90,8 +81,8 @@ export default function WalletConnect() {
                         <div className="">
                             <Button
                                 onClick={onClick}
-                                disabled={loading}
-                                text={loading ? 'Loading...' : label}
+                                disabled={isLoading}
+                                text={isLoading ? 'Connecting...' : label}
                                 color="black"
                             />
                         </div>

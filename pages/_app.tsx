@@ -1,4 +1,5 @@
 import '@component/styles/globals.css';
+import '@component/styles/notifi.css';
 import type { AppProps } from 'next/app';
 import Provider from '@component/components/Provider';
 import Header from '@component/components/Header';

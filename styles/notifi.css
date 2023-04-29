@@ -1,0 +1,1666 @@
+.notifi__light {
+    --notifi-card-secondary-background: rgb(214, 214, 214);
+    --notifi-placeholder-color: rgb(33 33 33 / 50%);
+    --notifi-focus-color: #000;
+    --notifi-toggle-handle: #fff;
+    --notifi-toggle-inactive: rgba(0, 0, 0, 0.2);
+    --notifi-toggle-active: rgba(0, 0, 0, 0.6);
+    --notifi-tooltip-background: rgba(214, 214, 214, 0.9);
+    --notifi-alert-color: rgb(252 0 0);
+    --notifi-link-color: #0000ee;
+    --notifi-checkmark-color: #22af3c;
+    --notifi-card-background: #fff;
+    --notifi-font-color: #262949;
+    --notifi-secondary-font-color: #80829d;
+    --notifi-intro-color: #262949;
+    --notifi-input-background: #f5f6fb;
+    --notifi-input-border: #e8ebf5;
+    --notifi-button-color: #1448f3;
+    --notifi-button-text-color: #fff;
+    --notifi-button-disabled-color: #b6b8d5;
+    --notifi-incoming-message: #f5f6fb;
+    --notifi-outgoing-message: #e5ebff;
+    --notifi-settings-icon-color: #262949;
+    --notifi-confirmation-color: #22af3c;
+}
+
+a {
+    text-decoration: none;
+}
+
+.notifi__dark {
+    --notifi-card-secondary-background: rgb(115, 74, 74);
+    --notifi-placeholder-color: #b6b8d5;
+    --notifi-focus-color: #fff;
+    --notifi-toggle-handle: #fff;
+    --notifi-toggle-inactive: #b6b8d5;
+    --notifi-toggle-active: linear-gradient(207.53deg, #fe7970 11.91%, #feb776 88.99%);
+    --notifi-tooltip-background: rgba(60, 60, 60, 1);
+    --notifi-alert-color: rgb(213, 25, 25);
+    --notifi-link-color: hsl(240, 100%, 85%);
+    --notifi-checkmark-color: #ea7e68;
+    --notifi-font-color: #fff;
+    --notifi-secondary-font-color: #b6b8d5;
+    --notifi-card-background: #000000;
+    --notifi-intro-color: #b6b8d5;
+    --notifi-input-background: #474858;
+    --notifi-input-border: #606060;
+    --notifi-button-color: #678afc;
+    --notifi-button-disabled-color: #80829d;
+    --notifi-button-text-color: #fff;
+    --notifi-incoming-message: #474858;
+    --notifi-outgoing-message: #678afc;
+    --notifi-settings-icon-color: #fff;
+    --notifi-confirmation-color: #45c95e;
+}
+
+input:autofill,
+input:-webkit-autofill {
+    border: none;
+    transition: background-color 50000s ease-in-out 0s;
+    -webkit-text-fill-color: var(--notifi-font-color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.NotifiSubscriptionCard__container,
+.NotifiIntercomCard__Container {
+    color: var(--notifi-font-color);
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica, sans-serif;
+    background-color: var(--notifi-card-background);
+    border-radius: 5px;
+    padding: 20px 20px 5px 20px;
+    min-height: 510px;
+}
+
+.NotifiPreviewCard__container {
+    flex-grow: 1;
+}
+
+.NotifiInputContainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.NotifiInputHeading {
+    color: var(--notifi-font-color);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 24px !important;
+    margin-bottom: 16px !important;
+}
+
+.NotifiSubscriptionCard__container *:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.NotifiSubscriptionCardV1__alertContainer {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.NotifiVerifyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.NotifiVerifyContainer ul {
+    padding-left: 0;
+    margin: 0;
+}
+
+.ConnectWalletRow__container {
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    border-bottom: 1px solid var(--notifi-input-border);
+}
+
+.ConnectWalletRow__topRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ConnectWalletRow__messageRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--notifi-secondary-font-color);
+    text-align: justify;
+    line-height: 1.25em;
+}
+
+.ConnectWalletRow__bottomRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ConnectWalletRow__verified,
+.ConnectWalletRow__publicKey,
+.ConnectWalletRow__container,
+.ConnectWalletRow__bottomRow {
+    margin: 0 !important;
+}
+
+.NotifiIntercomCard__container {
+    background-color: var(--notifi-card-background);
+    box-shadow: 0px 4px 30px 30px #0000000a;
+    width: 364px;
+    padding: 0;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.NotifiFooter__container {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    line-height: 14px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+.NotifiFooter__poweredByContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.NotifiFooter__poweredBy {
+    font-size: 12px;
+    line-height: 14px;
+    color: var(--notifi-font-color);
+    margin-bottom: 0 !important;
+}
+
+.NotifiFooter__logoSvg {
+    width: 62px;
+    height: 15px;
+    position: relative;
+    padding-top: 2px;
+    margin-left: 4px;
+    top: -2px;
+}
+
+.NotifiFooter__spacer {
+    flex-grow: 1;
+}
+
+.NotifiFooter__link a {
+    color: var(--notifi-font-color);
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.NotifiDisclosure__hyperlink {
+    color: var(--notifi-link-color);
+}
+
+.NotifiAlertBox__container {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.NotifiAlertBox__btn--left,
+.NotifiAlertBox__btn--right {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+}
+
+.NotifiAlertBox__btn--spacer {
+    width: 24px;
+    height: 24px;
+    visibility: hidden;
+    margin-bottom: 0 !important;
+}
+
+.NotifiAlertBox__content {
+    flex: 1;
+    display: flex;
+    margin-left: 8px;
+    margin-right: 8px;
+    color: var(--notifi-secondary-font-color);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    margin-bottom: 0 !important;
+}
+
+.NotifiAlertBox__content h2 {
+    color: var(--notifi-font-color);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    margin: 0 auto !important;
+}
+
+.NotifiAlertBox__iconSvg {
+    width: 24px;
+    height: 24px;
+}
+
+.NotifiAlertHistory__label {
+    font-size: 16px;
+    margin-bottom: 0px !important;
+    color: var(--notifi-font-color);
+    text-align: center;
+}
+
+.NotifiAlertHistory__notificationRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 0 0 10px;
+    flex-grow: 1;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.NotifiAlertHistory__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-right: 20px;
+    text-align: start;
+    width: 50%;
+    white-space: nowrap;
+}
+
+.NotifiAlertHistory__notificationRow:hover {
+    cursor: pointer;
+    background-color: var(--notifi-card-secondary-background);
+    border-radius: 16px;
+}
+
+.NotifiAlertHistory__dividerLine {
+    border-top: 2px solid var(--notifi-font-color);
+    border-radius: 5px;
+}
+
+.NotifiAlertHistory__notificationDate {
+    font-size: 12px;
+    line-height: 12px;
+    color: var(--notifi-font-color);
+    opacity: 60%;
+    padding-right: 25px;
+}
+
+.NotifiAlertHistory__notificationTitle {
+    font-size: 14px;
+    line-height: 14px;
+    overflow: hidden;
+    color: var(--notifi-font-color);
+    font-weight: bold;
+    width: 100%;
+    white-space: pre-line;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.NotifiAlertHistory__notificationImage {
+    width: 18px;
+    height: 18px;
+    padding-right: 10px;
+    color: var(--notifi-settings-icon-color);
+}
+
+.NotifiAlertHistory_noAlertDescription {
+    font-size: 14px;
+    line-height: 14px;
+    font-family: inherit;
+    color: var(--notifi-secondary-font-color);
+    text-align: center;
+}
+
+.NotifiAlertHistory__notificationSubject {
+    font-size: 12px;
+    line-height: 14px;
+    color: var(--notifi-font-color);
+    overflow: hidden;
+    white-space: pre-line;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.NotifiAlertHistory__manageAlertLink {
+    font-size: 14px;
+    line-height: 14px;
+    color: var(--notifi-link-color);
+    cursor: pointer;
+}
+
+.NotifiEmailInput__container,
+.NotifiSmsInput__container,
+.NotifiTelegramInput__container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--notifi-input-background);
+    border: 1.5px solid var(--notifi-input-border);
+    border-radius: 8px;
+    padding: 15px 16px;
+    align-items: center;
+    max-height: 18px;
+    box-sizing: content-box;
+}
+
+.NotifiEmailInput::after,
+.NotifiSmsInput::after {
+    content: 'OR';
+}
+
+.NotifiEmailInput__container:focus-within,
+.NotifiSmsInput__container:focus-within,
+.NotifiTelegramInput__container:focus-within {
+    box-shadow: inset 0px 0px 0px 3px var(--notifi-focus-color);
+}
+
+.NotifiEmailInput__errorMessage,
+.NotifiSmsInput__errorMessage,
+.NotifiTelegramInput__errorMessage {
+    color: var(--notifi-alert-color);
+    font-size: 14px;
+    margin-bottom: 0px !important;
+    text-align: center;
+}
+
+.NotifiEmailInput__input,
+.NotifiSmsInput__input,
+.NotifiTelegramInput__input {
+    flex-grow: 1;
+    font-size: 15px;
+    line-height: 18px;
+    background: none;
+    outline: none;
+    border: none;
+    color: var(--notifi-font-color);
+    font-weight: 500;
+}
+
+.NotifiEmailInput__input::placeholder,
+.NotifiSmsInput__input::placeholder,
+.NotifiTelegramInput__input::placeholder {
+    color: var(--notifi-placeholder-color);
+}
+
+.NotifiIntercomEmailInput__input::placeholder,
+.NotifiIntercomSmsInput__input::placeholder,
+.NotifiIntercomTelegramInput__input::placeholder {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+    color: #80829d;
+}
+
+.NotifiInput__icon {
+    margin-right: 10px;
+    margin-bottom: 0px !important;
+}
+
+.NotifiToggle__container {
+    --notifi-toggle-size: 22px;
+    --notifi-toggle-padding: 3px;
+    --notifi-toggle-container: calc(var(--notifi-toggle-size) + 2 * var(--notifi-toggle-padding));
+    position: relative;
+    display: inline-block;
+    width: calc(var(--notifi-toggle-container) + var(--notifi-toggle-size));
+    height: var(--notifi-toggle-container);
+}
+
+.NotifiEmailInput__label,
+.NotifiSmsInput__label,
+.NotifiTelegramInput__label {
+    display: flex;
+    margin-bottom: 12px !important;
+    color: var(--notifi-font-color);
+    opacity: 0.5;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+.NotifiToggle__input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.NotifiToggle__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--notifi-toggle-inactive);
+    border-radius: var(--notifi-toggle-container);
+    transition: 0.2s;
+}
+
+.NotifiToggle__slider:before {
+    position: absolute;
+    content: '';
+    height: var(--notifi-toggle-size);
+    width: var(--notifi-toggle-size);
+    left: var(--notifi-toggle-padding);
+    bottom: var(--notifi-toggle-padding);
+    background-color: var(--notifi-toggle-handle);
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.NotifiToggle__input:checked + .NotifiToggle__slider {
+    background: var(--notifi-toggle-active);
+}
+
+.NotifiToggle__input:checked + .NotifiToggle__slider:before {
+    transform: translateX(var(--notifi-toggle-size));
+}
+
+.NotifiToggleSlider--disabled {
+    cursor: progress;
+}
+
+.NotifiIntercomToggle__input:checked + .NotifiToggle__slider {
+    background-color: #1448f3;
+}
+
+.NotifiHwWalletToggle__container,
+.NotifiDiscordToggle__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.NotifiHwWalletToggle__label,
+.NotifiDiscordToggle__label {
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--notifi-font-color);
+    margin-bottom: 0px !important;
+}
+
+.EventTypeLabelRow__container,
+.EventTypeBroadcastRow__container,
+.EventTypeDirectPushRow__container,
+.EventTypeCustomHealthCheckRow__container,
+.EventTypeHealthCheckRow__container,
+.EventTypeCustomToggleRow__container,
+.EventTypeWalletBalanceRow__container,
+.EventTypePriceChangeRow__container,
+.EventTypeXMTPRow__container,
+.BrowserAlertToggle__container {
+    display: flex;
+    flex-direction: row;
+}
+
+.EventTypeBroadcastRow__label,
+.EventTypePriceChangeRow__label,
+.EventTypeDirectPushRow__label,
+.EventTypeCustomToggleRow_label,
+.EventTypeHealthCheckRow__label,
+.EventTypeCustomHealthCheckRow__label,
+.EventTypeCustomToggleRow__label,
+.EventTypeWalletBalanceRow__label,
+.EventTypeXMTPRow__label,
+.BrowserAlertToggle__label {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-right: 10px;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: left;
+    color: var(--notifi-font-color);
+}
+
+.EventTypeHealthCheckRow__container,
+.EventTypeHealthCheckRow__label {
+    margin-bottom: 0 !important;
+}
+
+.EventTypeHealthCheckRow__content {
+    font-size: 14px;
+    color: var(--notifi-secondary-font-color);
+}
+
+.EventTypeLabelRow__label {
+    color: var(--notifi-secondary-font-color);
+    flex-grow: 1;
+    margin-right: 10px;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: left;
+}
+
+.EventTypeUnsupportedRow__container {
+    display: none;
+}
+
+.NotifiCardButton__button,
+.NotifiSubscribeButton__button {
+    background-color: var(--notifi-button-color);
+    border: none;
+    cursor: pointer;
+    color: var(--notifi-button-text-color);
+    width: 100%;
+    display: block;
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 104px;
+    margin-top: auto;
+}
+
+.NotifiCardButton__button:disabled,
+.NotifiSubscribeButton__button:disabled,
+.NotifiStartChatButton__button:disabled,
+.NotifiIntercomSendMessageSection__button:disabled {
+    cursor: default;
+    color: #ffffff;
+    background-color: var(--notifi-button-disabled-color);
+}
+
+.NotifiSmsInput__dropdownContainer {
+    position: relative;
+    /* Don't want the not-child selector to affect the sms */
+    margin-bottom: 0 !important;
+}
+
+.NotifiSmsInput__input {
+    padding-left: 10px;
+}
+
+.NotifiSmsInput__dropdownSelect {
+    height: 35px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--notifi-font-color);
+    background-color: var(--notifi-input-background);
+    display: flex;
+}
+
+.NotifiSmsInput__dropdownSelect:focus-visible {
+    outline: none;
+    box-shadow: 0px 0px 0px 1px var(--notifi-focus-color);
+}
+
+.NotifiSmsInput__dropdownSelected {
+    display: flex;
+    align-items: center;
+    color: var(--notifi-font-color);
+    background-color: var(--notifi-input-background);
+    margin-top: 0;
+    margin-bottom: 0 !important;
+    cursor: pointer;
+    flex: 1;
+}
+
+.NotifiSmsInput__dropdownSelectValue {
+    margin-top: 0;
+    margin-bottom: 0 !important;
+    padding: 10px 25px 10px 0;
+    height: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.NotifiSmsInput__dropdownInput {
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 100%;
+    margin-bottom: 0 !important;
+}
+
+.NotifiSmsInput__dropdownSelectIcon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 10px;
+    height: 5px;
+    transition: 0.2s ease;
+    z-index: 9999;
+    cursor: pointer;
+    fill: var(--notifi-button-disabled-color);
+}
+
+.NotifiSmsInput__dropdownOptionList {
+    position: absolute;
+    background-color: var(--notifi-card-background);
+    border-radius: 4px;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    padding-left: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    min-width: 300px;
+    height: 270px;
+    overflow-y: scroll;
+    z-index: 99;
+    box-shadow: rgb(0 0 0 / 20%) 0px 5px 5px -3px, rgb(0 0 0 / 14%) 0px 8px 10px 1px,
+        rgb(0 0 0 / 12%) 0px 3px 14px 2px;
+}
+
+.NotifiSmsInput__dropdownOptionList::-webkit-scrollbar {
+    width: 5px;
+}
+
+.NotifiSmsInput__dropdownOptionList::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border: 4px solid var(--notifi-input-border);
+    border-radius: 10px;
+}
+
+.NotifiSmsInput__dropdownOption {
+    padding: 10px 16px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0 !important;
+    transition: 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    cursor: pointer;
+}
+
+.NotifiSmsInput__dropdownOption-selected,
+.NotifiSmsInput__dropdownOption:hover {
+    background-color: rgba(234, 126, 104, 0.08);
+    transition: 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.NotifiSmsInput__dropdownCountry {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0 !important;
+    flex: 1 1 auto;
+}
+
+.NotifiSmsInput__dropdownFlag {
+    margin-right: 16px;
+    font-weight: 400;
+}
+
+.NotifiSmsInput__dropdownFlag,
+.NotifiSmsInput__dropdownName {
+    margin-top: 0;
+    margin-bottom: 0 !important;
+}
+
+.NotifiInputSeparator__container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    overflow: hidden;
+    text-align: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.NotifiInputSeparator__container:before,
+.NotifiInputSeparator__container:after,
+.NotifiPreviewCardSeparator:before,
+.NotifiPreviewCardSeparator::after {
+    background-color: var(--notifi-secondary-font-color);
+    content: '';
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 45%;
+}
+
+.NotifiPreviewCard__backArrowContainer {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.NotifiIntercomInputSeparator__container {
+    margin: 10px 20px 10px 20px;
+    color: #80829d;
+    opacity: 45%;
+}
+
+.NotifiInputSeparator__content {
+    padding: 0px 8px 0px 8px;
+}
+
+.NotifiUserInfoPanelContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px 16px 0px 16px;
+    border-radius: 5px;
+    background-color: var(--notifi-card-secondary-background);
+}
+
+.NotifiPreviewCard__editButton {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0px 0px 20px 0px;
+    background-color: transparent;
+    font-weight: 600;
+    border: none;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    color: var(--notifi-checkmark-color);
+    gap: 4px;
+}
+
+.NotifiUserInfoPanel__emailConfirmation,
+.NotifiUserInfoPanel__telegramConfirmation {
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.ConnectWalletRow__verified {
+    display: block;
+    font-size: 14px;
+    color: var(--notifi-secondary-font-color);
+}
+
+.ConnectWalletRow__button,
+.ConnectWalletRow__connectAnywayButton,
+.NotifiUserInfoPanel__myWalletConfirmation,
+.NotifiUserInfoPanel__emailConfirmationLabel,
+.NotifiUserInfoPanel__telegramConfirmationLabel,
+.DestinationErrorMessage__confirmationLinkLabel {
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--notifi-checkmark-color);
+    font-weight: 600;
+    line-height: 18px;
+    background-color: transparent;
+    border: 0;
+    box-shadow: 0;
+    outline: none;
+}
+
+.ConnectWalletRow__connectAnywayButton:disabled,
+.ConnectWalletRow__button:disabled {
+    cursor: default;
+    color: var(--notifi-secondary-font-color);
+}
+
+.NotifiUserInfoPanel__myWallet,
+.NotifiUserInfoPanel__email,
+.NotifiUserInfoPanel__telegram,
+.NotifiUserInfoPanel__sms,
+.NotifiUserInfoPanel__discord {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    align-items: baseline;
+    overflow-wrap: anywhere;
+}
+
+.NotifiUserInfoPanel__myWalletLabel,
+.NotifiUserInfoPanel__emailLabel,
+.NotifiUserInfoPanel__smsLabel,
+.NotifiUserInfoPanel__smsLabel,
+.NotifiUserInfoPanel__telegramLabel,
+.otifiUserInfoPanel__discordLabel {
+    margin-bottom: 0 !important;
+    font-size: 15px;
+    line-height: 18px;
+    color: var(--notifi-font-color);
+}
+
+.NotifiTooltip__infoIcon {
+    margin-left: 10px;
+    margin-bottom: 0 !important;
+    fill: var(--notifi-font-color);
+}
+
+.NotifiTooltip__body {
+    width: 180px;
+    visibility: hidden;
+    position: absolute;
+    left: -70px;
+    bottom: calc(100% + var(--notifi-tooltip-arrow-offset));
+    font-size: 12px;
+    z-index: 1;
+}
+
+.NotifiTooltip__body::before {
+    content: '';
+    display: block;
+    width: var(--notifi-tooltip-arrow-size);
+    height: var(--notifi-tooltip-arrow-size);
+    transform: translate(-50%) rotate(45deg);
+    background-color: var(--notifi-tooltip-background);
+    position: absolute;
+    top: calc(100% - var(--notifi-tooltip-arrow-offset));
+    left: 50%;
+}
+
+.NotifiTooltip__container:hover > .NotifiTooltip__body {
+    visibility: visible;
+}
+
+.NotifiTooltip__container {
+    margin-bottom: 0 !important;
+    position: relative;
+    --notifi-tooltip-arrow-size: 10px;
+    --notifi-tooltip-arrow-offset: 7px;
+}
+
+.NotifiTooltip__label {
+    padding: 16px;
+    color: var(--notifi-font-color);
+    text-align: left;
+    background-color: var(--notifi-tooltip-background);
+    border-radius: 8px;
+    white-space: pre-line;
+    line-height: 15px;
+}
+
+.NotifiAlertHistory__settingsIcon {
+    position: absolute;
+    right: 0px;
+    height: 20px;
+}
+
+.NotifiAlertHistory__settingsIcon path {
+    fill: var(notifi-settings-icon-color);
+    cursor: pointer;
+}
+
+.NotifiAlertHistory__emptyAlertsBellIcon path {
+    fill: var(--notifi-button-color);
+    cursor: pointer;
+}
+
+.NotifiAlertHistory__noAlertContainer {
+    padding-top: 67px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ALERT DETAILS CARD */
+.NotifiAlertDetails__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.NotifiAlertDetails__topContentContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 26px;
+}
+
+.NotifiAlertDetails__topContent {
+    text-align: start;
+    font-weight: 700;
+    font-size: 16px;
+    overflow-wrap: break-word;
+}
+
+.NotifiAlertDetails__bottomContent {
+    text-align: start;
+    font-size: 14px;
+    overflow-wrap: break-word;
+}
+
+.NotifiAlertDetails__timestamp {
+    font-size: 12px;
+}
+
+/* Alert List on Edit View */
+.NotifiAlertListContainer__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.NotifiAlertListPreview__descriptionText {
+    font-size: 13px;
+    font-weight: 500;
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.NotifiAlertListContainer__checkmarkIcon {
+    margin-bottom: 0px !important;
+    height: 15px;
+    width: 15px;
+}
+
+.NotifiAlertListContainer__checkmarkIcon path {
+    stroke: var(--notifi-checkmark-color);
+    stroke-width: 5px;
+}
+
+.NotifiAlertList__listItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.NotifiAlertLisPreview__checkmarkContainer {
+    justify-content: center;
+}
+
+.NotifiAlertListContainer__listItemContent {
+    font-weight: 600;
+    font-size: 14px;
+    margin-left: 14px;
+}
+
+.NotifiStartChatButton__button {
+    height: 49px;
+    width: 266px;
+    background-color: var(--notifi-button-color);
+    border-radius: 16px;
+    border: 0;
+    margin: 28px 48px 28px 48px;
+    cursor: pointer;
+}
+
+.NotifiStartChatButton__label {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+}
+
+.NotifiIntercomCard__title {
+    margin-top: 35px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 27px;
+    text-align: center;
+    color: var(--notifi-font-color);
+}
+
+.NotifiIntercomCard__subtitle1 {
+    margin-left: 20px;
+    margin-right: 20px;
+    color: var(--notifi-font-color);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+}
+
+.NotifiIntercomCard__subtitle2 {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 19px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--notifi-secondary-font-color);
+}
+
+.NotifiSupportNotificationOption__container {
+    margin: 50px 28px 10px 28px;
+}
+
+.NotifiIntercomEmailInput__container,
+.NotifiIntercomSmsInput__container,
+.NotifiIntercomTelegramInput__container {
+    background-color: var(--notifi-input-background);
+    border-radius: 6px;
+    margin: 20px;
+    margin-top: 10px;
+}
+
+.NotifiIntercomTelegramInput__container {
+    margin-bottom: 10px;
+}
+
+.NotifiIntercomEmailInput__container:focus-within,
+.NotifiIntercomSmsInput__container:focus-within,
+.NotifiIntercomTelegramInput__container:focus-within {
+    box-shadow: inset 0px 0px 0px 1px var(--notifi-focus-color);
+}
+
+.NotifiIntercomSmsInput__dropdownContainer {
+    background-color: var(--notifi-input-background);
+}
+
+.NotifiIntercomSmsInput__dropdownSelect {
+    background-color: var(--notifi-input-background);
+    border: 0;
+}
+
+.NotifiIntercomSmsInput__dropdownSelect:focus-visible {
+    box-shadow: none;
+}
+
+.BrowserAlertToggle__label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.BrowserAlertToggle__container {
+    margin-top: 12px;
+}
+
+.NotifiIntercomHeader__container {
+    height: 49px;
+    border-bottom: 1px solid #e8ebf5;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.NotifiIntercomHeader__content {
+    color: var(--notifi-font-color);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+    text-align: left;
+    margin-left: 25px;
+}
+
+.NotifiIntercomHeader__leftContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.NotifiIntercomHeader__leftContainer svg path {
+    stroke: var(--notifi-button-color);
+}
+
+.NotifiIntercomChatMessageSection__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 270px;
+    overflow-y: auto;
+}
+
+.NotifiIntercomChatMessageList__groupContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.ChatWindowIntro__virtualContainer {
+    height: 80px;
+    color: red;
+}
+
+.NotifiIntercomCard__container .virtual-container {
+    color: var(--notifi-font-color);
+}
+
+.NotifiIntercomChatMessageSectionIntro__content {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: 12px;
+    color: var(--notifi-intro-color);
+}
+
+.NotifiIntercomChatMessageDate__container {
+    display: flex;
+    justify-content: center;
+}
+
+.NotifiIntercomChatMessageDate__body {
+    text-align: center;
+    display: inline-block;
+    width: 64px;
+    padding: 5px;
+    background: var(--notifi-incoming-message);
+    border-radius: 30px;
+    margin: 10px;
+}
+
+.NotifiIntercomChatMessageDate__content {
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 12px;
+    color: var(--notifi-secondary-font-color);
+}
+
+.NotifiIntercomSendMessageSection__container {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.NotifiIntercomSendMessageSection__textarea {
+    resize: none;
+    font-family: inherit;
+    font-size: 16px;
+    height: 100px;
+    border-bottom: 1px solid var(--notifi-input-border);
+    border-top: 1px solid var(--notifi-input-border);
+    border-right: none;
+    border-left: none;
+    padding: 12px 20px;
+    background-color: transparent;
+    color: var(--notifi-font-color);
+}
+
+.NotifiIntercomSendMessageSection__textarea:focus-visible {
+    outline: none;
+}
+
+.NotifiIntercomSendMessageSection__button {
+    height: 28px;
+    width: 62px;
+    border-radius: 4px;
+    background-color: var(--notifi-button-color);
+    text-align: center;
+    border: none;
+    color: #ffffff;
+    margin-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.NotifiIntercomChatIncomingMessageGroup__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.NotifiIntercomChatOutgoingMessageGroup__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.NotifiIntercomChatIncomingMessage__container {
+    display: flex;
+    flex-direction: row;
+}
+
+.NotifiIntercomChatIncomingMessage__body {
+    padding: 12px 20px 24px 20px;
+    max-width: 288px;
+    border-radius: 16px;
+    background: var(--notifi-incoming-message);
+    text-align: left;
+    margin: 0 16px 8px 12px;
+    position: relative;
+    overflow-wrap: break-word;
+    border-radius: 0 16px 16px 16px;
+    color: var(--notifi-font-color);
+}
+
+.NotifiIntercomChatOutgoingMessage__body {
+    padding: 12px 20px 24px 20px;
+    max-width: 250px;
+    border-radius: 16px;
+    background: var(--notifi-outgoing-message);
+    text-align: left;
+    margin: 0 16px 8px 12px;
+    position: relative;
+    overflow-wrap: break-word;
+    border-radius: 16px 0 16px 16px;
+    color: var(--notifi-font-color);
+}
+
+.NotifiIntercomChatOutgoingMessage__timeStamp {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 12px;
+    color: var(--notifi-font-color);
+    min-width: 35px;
+    bottom: 7px;
+    right: 7px;
+}
+
+.NotifiIntercomChatOutgoingMessage__sender {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.NotifiIntercomChatWindow__settingIcon,
+.NotifiIntercomSettingHeader__backArrow {
+    cursor: pointer;
+}
+
+.NotifiIntercomChatWindow__settingIcon svg path {
+    fill: #80829d;
+}
+
+.NotifiIntercomCardSettingContent__container {
+    padding: 20px 0 0 0;
+}
+
+.NotifiEmailVerification__button,
+.NotifiTelegramVerification__button {
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 16px;
+    text-align: right;
+    color: var(--notifi-checkmark-color);
+}
+
+.NotifiIntercomChatMessage__avatar {
+    display: block;
+    border-radius: 20px;
+    background-color: #f5f6fb;
+    height: 34px;
+    margin-left: 16px;
+}
+
+.NotifiExpiredTokenCard__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding-top: 32px;
+}
+
+.NotifiExpiredTokenCard__title {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.NotifiExpiredTokenCard__subtitle {
+    font-size: 13px;
+    opacity: 0.5;
+    padding-bottom: 24px;
+}
+
+.NotifiExpiredTokenCard__button {
+    background-color: var(--notifi-button-color);
+    color: var(--notifi-button-text-color);
+    border-radius: 16px;
+    border: 0;
+    width: 243px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.NotifiExpiredTokenCard__buttonLabel {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.EventTypeHealthCheckRow__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f6f6fa;
+    color: #808080;
+    height: 47px;
+    width: 65px;
+    border-radius: 8px;
+    opacity: 90%;
+    margin-right: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    border: 1px solid #dae0e1;
+    cursor: pointer;
+}
+
+.EventTypeHealthCheckRow__buttonSelected {
+    border: 2px solid var(--notifi-button-color);
+    color: #000000;
+}
+
+.EventTypeHealthCheckRow__customButton {
+    text-align: center;
+    width: 110px;
+    color: #000000;
+}
+
+.EventTypeHealthCheckRow__buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.EventTypeTradingPairsRow__container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+.EventTypeTradingPairsRow__container > * {
+    margin-bottom: 0 !important;
+}
+
+.EventTypeTradingPairsRow__container > *:not(:first-child) {
+    padding-top: 10px;
+}
+
+.EventTypeTradingPairsRow__container > *:not(:last-child) {
+    padding-bottom: 10px;
+    border-bottom: 1px var(--notifi-font-color) solid;
+}
+
+.EventTypeTradingPairsRow__addPair {
+    display: inline-block;
+    align-self: flex-start;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--notifi-link-color);
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.EventTypeTradingPairsRow__addPair:disabled {
+    cursor: default;
+    color: var(--notifi-secondary-font-color);
+}
+
+.EventTypeTradingPairsRow__addPair::before {
+    content: '+ ';
+}
+
+.TradingPairSettingsRow__container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.TradingPairSettingsRow__dropdownContainer {
+    background-color: var(--notifi-input-background);
+    display: flex;
+    align-items: center;
+    border: 1px var(--notifi-input-border) solid;
+    border-radius: 5px;
+}
+
+.TradingPairSettingsRow__dropdownContainer::after {
+    content: '';
+    width: 1em;
+    height: 1em;
+    margin-right: 10px;
+    background-color: var(--notifi-font-color);
+    clip-path: polygon(90% 30%, 10% 30%, 50% 70%);
+}
+
+.TradingPairSettingsRow__dropdown {
+    box-sizing: border-box;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    margin: 0;
+    width: 100%;
+    color: inherit;
+    cursor: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    outline: none;
+}
+
+.TradingPairSettingsRow__radioButton {
+    font-size: 16px;
+    line-height: 20px;
+    padding: 10px 30px;
+    margin-right: 10px;
+    margin-bottom: 0 !important;
+    border-radius: 5px;
+    border: none;
+    color: #000;
+    background-color: var(--notifi-tooltip-background);
+    cursor: pointer;
+}
+
+.TradingPairSettingsRow__radioSelected {
+    color: var(--notifi-button-text);
+    background-color: var(--notifi-button-color);
+}
+
+.TradingPairAlertRow__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.TradingPairAlertRow__textContainer {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: stretch;
+    margin-right: 10px;
+    margin-bottom: 0 !important;
+}
+
+.TradingPairAlertRow__name {
+    display: block;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--notifi-font-color);
+}
+
+.TradingPairAlertRow__description {
+    display: block;
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--notifi-secondary-font-color);
+}
+
+.TradingPairAlertRow__deleteIcon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    fill: var(--notifi-font-color);
+    cursor: pointer;
+}
+
+.TradingPairSettingsRow__priceInputContainer {
+    background-color: var(--notifi-input-background);
+    display: flex;
+    align-items: center;
+    border: 1px var(--notifi-input-border) solid;
+    border-radius: 5px;
+}
+
+.TradingPairSettingsRow__priceInput {
+    box-sizing: border-box;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    margin: 0;
+    width: 100%;
+    color: inherit;
+    cursor: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    outline: none;
+}
+
+.TradingPairSettingsRow__saveButton {
+    font-size: 16px;
+    line-height: 20px;
+    padding: 5px 20px;
+    align-self: flex-start;
+    border-radius: 5px;
+    border: none;
+    color: var(--notifi-button-text);
+    background-color: var(--notifi-button-color);
+    cursor: pointer;
+}
+
+.TradingPairSettingsRow__saveButton:disabled {
+    cursor: default;
+    color: var(--notifi-secondary-font-color);
+    background-color: var(--notifi-button-disabled-color);
+}
+
+.NotifiAlertHistory__container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    visibility: visible;
+}
+
+.NotifiAlertHistory__container.NotifiAlertHistory__container--hidden {
+    visibility: hidden;
+}
+
+.NotifiAlertHistory__virtuoso {
+    margin-bottom: 25px;
+    overflow-x: hidden;
+}
+
+.notifiLogo-letters {
+    fill: var(--notifi-font-color);
+}
+
+.buttonDisabled {
+    pointer-events: none;
+}
+
+.NotifiSpinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--notifi-font-color);
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.NotifiLoadingStateCard__container {
+    margin-top: 90px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+}
+
+.NotifiUserInfoPanel__emailConfirmationSent,
+.DestinationError__emailConfirmationSent {
+    color: var(--notifi-confirmation-color);
+}
+
+.DestinationErrorMessage__ErrorMessageLabel {
+    font-size: 14px;
+    color: var(--notifi-button-disabled-color);
+    font-weight: 600;
+}
+
+.DestinationErrorMessage__ErrorMessageContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.DestinationErrorMessage__ErrorMessageLabel {
+    margin-bottom: 0 !important;
+}
+
+.DestinationErrorMessage__tooltipIcon {
+    margin-left: 4px;
+    fill: var(--notifi-button-disabled-color);
+    height: 15px;
+    display: flex;
+    width: 15px;
+    margin-bottom: 4px;
+}
+
+.ErrorStateCard__errorMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -80px;
+    flex-grow: 1;
+    padding: 0 20px;
+}
+
+.NotifiInputContainer__LoadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}

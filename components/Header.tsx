@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Wallet from './WalletConnect';
+import NotifiCard from './NotifiCard';
 
 const Header = () => {
     return (

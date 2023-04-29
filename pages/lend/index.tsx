@@ -25,6 +25,7 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.Web3Provider(window.ethereum as any);
 } else {
     provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
         'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
     );
 }
@@ -33,23 +34,44 @@ const Lend = () => {
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [offers, setOffers] = useState<offer[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
 
     React.useEffect(() => {
-        if (!address) return;
+        const getNetwork = async () => {
+            const network = await provider.getNetwork();
+            if (network.name !== 'goerli') setIsGoerliNetwork(false);
+            else setIsGoerliNetwork(true);
+        };
+        getNetwork();
+    }, []);
+
+    React.useEffect(() => {
+        if (!address || !isGoerliNetwork) return;
 
         const getOffers = async () => {
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
             try {
                 const offers = await contract.getOffers();
                 setOffers(offers);
+                setIsLoading(false);
             } catch (error) {
                 console.error(error);
             }
         };
         getOffers();
-    }, [address, metaxchgAddress]);
+    }, [address, metaxchgAddress, isGoerliNetwork]);
 
     if (!address) return <WalletNotConnected />;
+
+    if (!isGoerliNetwork)
+        return (
+            <div className="px-[120px] text-[#ff0000]">
+                Switch the network to Goerli in order to see Offers!
+            </div>
+        );
+
+    if (isLoading) return <div className="px-[120px]">Loading...</div>;
 
     return (
         <div className="px-[120px] py-[20px]">
@@ -66,6 +88,8 @@ const Lend = () => {
                     ? offers.map((offer, index) => {
                           const isActive = offer['isActive'];
                           if (!isActive) return null;
+                          if (offer['borrower'].toLowerCase() === address.toLowerCase())
+                              return null;
                           const duration = offer['duration'] / 86400;
                           const apr = offer['interestRate'];
 
@@ -88,6 +112,7 @@ const Lend = () => {
                                   nftAddress={nftAddress}
                                   tokenId={tokenId}
                                   index={index}
+                                  loanValue={loanValue}
                               />
                           );
                       })

@@ -8,10 +8,14 @@ import Button from '@component/components/Button';
 import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
 import logoBlack from '../public/injectiveblack.svg';
+import NotifiCard from '@component/components/NotifiCard';
 
 export default function Home() {
     return (
         <main className="w-full px-8">
+            {/* <div> */}
+            {/* <NotifiCard /> */}
+            {/* </div> */}
             <div className="w-full h-[calc(100vh-90px)] text-center flex flex-col-reverse md:flex-row items-center justify-end mt-[50px] md:mt-0 md:justify-center md:space-x-[80px]">
                 <div className="">
                     <div className="flex flex-col items-center md:items-start md:text-start space-y-[20px] md:py-0 py-[30px]">
