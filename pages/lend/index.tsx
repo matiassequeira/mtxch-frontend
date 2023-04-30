@@ -77,10 +77,7 @@ const Lend = () => {
         <div className="px-[120px] py-[20px]">
             <div className=" flex mb-4">
                 <div className="w-[60%]">
-                    <h1 className="text-center font-bold">Requests</h1>
-                </div>
-                <div>
-                    <h1 className="font-bold">Open Offers</h1>
+                    <h1 className="font-bold mb-[30px]">Loan Requests</h1>
                 </div>
             </div>
             <div className="space-y-[25px]">

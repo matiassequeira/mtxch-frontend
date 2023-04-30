@@ -8,13 +8,16 @@ import { useRouter } from 'next/router';
 import { useConnect } from 'wagmi';
 import { ethers } from 'ethers';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
+import NotifiBell from './NotifiBell';
 
 export default function WalletConnect() {
     const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
-    const { isConnected } = useAccount();
+    const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
 
-    const label = isConnected ? 'Disconnect' : 'Connect Wallet';
+    const label = address
+        ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
+        : 'Connect Wallet';
     const account = useAccount();
     const { setWalletConnected, setUserAddress } = useContext(UserContext) as UserContextType;
 
@@ -61,7 +64,8 @@ export default function WalletConnect() {
         <>
             <div className="space-x-[10px]">
                 {pathname === '/' ? (
-                    <>
+                    <div className="space-x-[20px] flex items-center">
+                        <NotifiBell />
                         <Link
                             href={'/nfts'}
                             className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
@@ -75,9 +79,10 @@ export default function WalletConnect() {
                                 color="black"
                             />
                         </div>
-                    </>
+                    </div>
                 ) : (
-                    <>
+                    <div className="space-x-[20px] flex items-center">
+                        <NotifiBell />
                         <div className="">
                             <Button
                                 onClick={onClick}
@@ -86,7 +91,7 @@ export default function WalletConnect() {
                                 color="black"
                             />
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </>

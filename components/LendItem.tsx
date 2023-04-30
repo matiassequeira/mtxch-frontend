@@ -33,6 +33,11 @@ const LendItem: FC<LendItemProps> = (props) => {
     const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
 
+    const name =
+        nftAddress.toLowerCase() === '0xfa97df129fe2ffdfd63bc3f245dd769f52742bad'
+            ? 'Bored Ape Yacht Club'
+            : 'CRYPTOPUNKS';
+
     const { loading, error, nft } = useNft(nftAddress, tokenId.toString());
     useEffect(() => {
         if (nft) {
@@ -72,7 +77,7 @@ const LendItem: FC<LendItemProps> = (props) => {
     };
 
     return (
-        <>
+        <div>
             <div className="flex w-full ">
                 <div className="w-[60%] flex">
                     <Image src={nftSrc} alt={''} width={150} height={150} />
@@ -86,7 +91,8 @@ const LendItem: FC<LendItemProps> = (props) => {
                     <Button color="black" text="Accept" onClick={acceptOffer} />
                 </div>
             </div>
-        </>
+            <h1 className="text-[16px]">{name}</h1>
+        </div>
     );
 };
 
