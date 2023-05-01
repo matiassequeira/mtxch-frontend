@@ -9,6 +9,9 @@ import UserContext, { UserContextType } from '@component/components/UserContext'
 import NftListItem from '@component/components/NftListItem';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
 import { useRouter } from 'next/router';
+import CounterForm from '@component/components/CounterForm';
+import Counter from '@component/components/Counter';
+import PendingTx from '@component/components/PendingTx';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -31,6 +34,8 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { address } = useAccount();
     const [isOwner, setIsOwner] = useState(true);
 
+    const [openPendingMenu, setOpenPendingMenu] = useState(false);
+    const [txHash, setTxHash] = useState('');
     const router = useRouter();
 
     const listNft = (data: {
@@ -82,7 +87,8 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
                 gasLimit: gasLimit,
             };
             const transactionResponse = await signer.sendTransaction(transaction);
-
+            setTxHash(transactionResponse.hash);
+            setOpenPendingMenu(true);
             const success = await checkTxStatus(provider, transactionResponse.hash);
             // IF SUCCESS REDIRECT TO BORROWER
 
@@ -113,6 +119,10 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
             </div>
 
             <ListForm listNft={listNft} />
+
+            {openPendingMenu ? (
+                <PendingTx txHash={txHash} closeMenu={() => setOpenPendingMenu(false)} />
+            ) : null}
         </div>
     );
 };
