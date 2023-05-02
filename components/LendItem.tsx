@@ -8,6 +8,15 @@ import { erc20ABI, useSwitchNetwork } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 
+let provider: any;
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+} else {
+    provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    );
+}
 export interface LendItemProps {
     src: any;
     tokenValuation: number;
@@ -20,16 +29,6 @@ export interface LendItemProps {
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    let provider: any;
-    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    } else {
-        provider = new ethers.providers.JsonRpcProvider(
-            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        );
-    }
-
     const { src, tokenValuation, APR, duration, nftAddress, tokenId, index, loanValue } = props;
     const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);

@@ -9,6 +9,7 @@ import { useConnect } from 'wagmi';
 import { ethers } from 'ethers';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 import NotifiBell from './NotifiBell';
+import WalletStrategyComponent from './WalletStrategy';
 
 export default function WalletConnect() {
     let provider: any;
@@ -63,8 +64,8 @@ export default function WalletConnect() {
             <Button
                 onClick={onClick}
                 disabled={isLoading}
-                text={isLoading ? 'Connecting...' : label}
-                color="black"></Button>
+                text={isLoading ? 'Connecting...' : 'Connect Wallet'}
+                color="white"></Button>
         );
     return (
         <>
@@ -78,24 +79,14 @@ export default function WalletConnect() {
                             Go To App
                         </Link>
                         <div className="hidden sm:inline-block">
-                            <Button
-                                onClick={onClick}
-                                disabled={isLoading}
-                                text={isLoading ? 'Connecting...' : label}
-                                color="black"
-                            />
+                            <WalletStrategyComponent disconnect={onClick} />
                         </div>
                     </div>
                 ) : (
                     <div className="space-x-[20px] flex items-center">
                         <NotifiBell />
                         <div className="">
-                            <Button
-                                onClick={onClick}
-                                disabled={isLoading}
-                                text={isLoading ? 'Connecting...' : label}
-                                color="black"
-                            />
+                            <WalletStrategyComponent disconnect={onClick} />
                         </div>
                     </div>
                 )}
