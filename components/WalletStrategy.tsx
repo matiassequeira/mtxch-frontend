@@ -88,7 +88,10 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
                         Injective Balance: {injBalance}inj
                     </div>
                     <div className="p-[10px] border-black border-solid border-b-[2px]">
-                        Goerli Balance: {wethBalance}WETH
+                        Injective WETH: 35WETH
+                    </div>
+                    <div className="p-[10px] border-black border-solid border-b-[2px]">
+                        Goerli WETH: {wethBalance}WETH
                     </div>
                     <div
                         className="p-[10px] border-black border-solid border-b-[2px] hover:cursor-pointer"
