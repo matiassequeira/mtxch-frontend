@@ -74,7 +74,7 @@ export default function WalletConnect() {
                         <NotifiBell />
                         <Link
                             href={'/nfts'}
-                            className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black border-solid border-[2px]">
+                            className="rounded-md inline-block text-center w-[135px] py-[12px] text-[14px] border-black  border-solid border-[2px]">
                             Go To App
                         </Link>
                         <div className="hidden sm:inline-block">

@@ -17,17 +17,16 @@ export interface loan {
     offer: offer;
 }
 
+let provider: any;
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+} else {
+    provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    );
+}
 const Loans = () => {
-    let provider: any;
-    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    } else {
-        provider = new ethers.providers.JsonRpcProvider(
-            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        );
-    }
-
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [loans, setLoans] = useState<{ loan: loan; index: number }[]>([]);
@@ -57,7 +56,7 @@ const Loans = () => {
                 requestSwitchNetwork();
             }
         });
-    }, []);
+    }, [provider]);
 
     React.useEffect(() => {
         if (!address) return;
@@ -94,7 +93,7 @@ const Loans = () => {
             }
         };
         getOffers();
-    }, [address, metaxchgAddress]);
+    }, [address, metaxchgAddress, provider]);
 
     React.useEffect(() => {
         const getNetwork = async () => {
@@ -103,7 +102,7 @@ const Loans = () => {
             else setIsGoerliNetwork(true);
         };
         getNetwork();
-    }, [address]);
+    }, [address, provider]);
 
     if (!isGoerliNetwork)
         return (

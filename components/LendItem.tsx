@@ -50,7 +50,7 @@ const LendItem: FC<LendItemProps> = (props) => {
         const signer = provider.getSigner();
         const signerAddress = signer.getAddress();
         const network = await provider.getNetwork();
-        console.log('here HERE HERE');
+
         if (network.name !== 'goerli') await requestSwitchNetwork();
         const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, signer);
         const tokenContract = new ethers.Contract(wethAddress, erc20ABI, signer);

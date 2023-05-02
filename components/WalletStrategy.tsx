@@ -24,8 +24,6 @@ const WalletStrategyComponent = () => {
         setInjAddress(address);
         const fn = async () => {
             const balances = await chainRestBankApi.fetchBalances(injAddress);
-            console.log(balances);
-            // console.log(moduleParams);
         };
         fn();
     }, [address]);

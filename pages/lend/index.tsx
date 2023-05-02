@@ -21,17 +21,16 @@ export interface offer {
     tokenValuation: BigNumberish;
 }
 
+let provider: any;
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+} else {
+    provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    );
+}
 const Lend = () => {
-    let provider: any;
-    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    } else {
-        provider = new ethers.providers.JsonRpcProvider(
-            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        );
-    }
-
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [offers, setOffers] = useState<offer[]>([]);
@@ -60,7 +59,7 @@ const Lend = () => {
                 requestSwitchNetwork();
             }
         });
-    }, []);
+    }, [provider]);
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -78,7 +77,7 @@ const Lend = () => {
             }
         };
         getOffers();
-    }, [address, metaxchgAddress, isGoerliNetwork]);
+    }, [address, metaxchgAddress, isGoerliNetwork, provider]);
 
     if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
 

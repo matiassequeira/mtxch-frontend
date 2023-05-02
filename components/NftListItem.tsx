@@ -7,6 +7,15 @@ import { useNft } from 'use-nft';
 import UserContext, { UserContextType } from './UserContext';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 
+let provider: any;
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+} else {
+    provider = new ethers.providers.JsonRpcProvider(
+        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    );
+}
 interface NftListItemProps {
     nftAddress: `0x${string}`;
     token_id: string;
@@ -14,16 +23,6 @@ interface NftListItemProps {
 }
 
 const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => {
-    let provider: any;
-    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    } else {
-        provider = new ethers.providers.JsonRpcProvider(
-            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        );
-    }
-
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const [floorPrice, setFloorPrice] = useState<number | null>(null);
     const { address } = useAccount();
@@ -36,7 +35,6 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
 
     if (!loading && nft?.owner !== address) {
         setIsOwner(false);
-        return null;
     }
 
     React.useEffect(() => {
@@ -50,7 +48,7 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
             }
         };
         getFloorPrice();
-    }, [metaxchgAddress, nftAddress]);
+    }, [metaxchgAddress, nftAddress, provider]);
 
     return (
         <>
