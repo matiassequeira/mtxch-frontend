@@ -36,7 +36,7 @@ const Counter = () => {
                 <h2 className="font-bold">Request</h2>
                 <Image src={src} alt={''} width={150} height={150} />
                 <div className="flex flex-col justify-between space-y-[10px]">
-                    <h2>Loan Amount: {loanAmount} WETH</h2>
+                    <h2>Loan: {loanAmount} WETH</h2>
                     <h2>Duration: {duration} days</h2>
                     <h2>APR: {APR.toFixed(1)}%</h2>
                 </div>

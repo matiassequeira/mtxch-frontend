@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 import { erc20ABI, useSwitchNetwork } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
+import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 
 export interface LendItemProps {
     src: any;
@@ -18,17 +19,17 @@ export interface LendItemProps {
     loanValue: number;
 }
 
-let provider: any;
-if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
-} else {
-    provider = new ethers.providers.JsonRpcProvider(
-        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-    );
-}
-
 const LendItem: FC<LendItemProps> = (props) => {
+    let provider: any;
+    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+        provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    } else {
+        provider = new ethers.providers.JsonRpcProvider(
+            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        );
+    }
+
     const { src, tokenValuation, APR, duration, nftAddress, tokenId, index, loanValue } = props;
     const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
@@ -48,15 +49,16 @@ const LendItem: FC<LendItemProps> = (props) => {
     const acceptOffer = async () => {
         const signer = provider.getSigner();
         const signerAddress = signer.getAddress();
-
+        const network = await provider.getNetwork();
+        console.log('here HERE HERE');
+        if (network.name !== 'goerli') await requestSwitchNetwork();
         const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, signer);
         const tokenContract = new ethers.Contract(wethAddress, erc20ABI, signer);
 
-        const amount = ethers.utils.parseUnits('1000000000', 18);
-
         const isApproved = await tokenContract.allowance(signerAddress, metaxchgAddress);
 
-        if (!isApproved) {
+        if (Number(isApproved) < tokenValuation) {
+            const amount = ethers.utils.parseUnits('1000000000', 18);
             const approveTx = {
                 to: wethAddress,
                 data: tokenContract.interface.encodeFunctionData('approve', [
@@ -78,20 +80,23 @@ const LendItem: FC<LendItemProps> = (props) => {
 
     return (
         <div>
-            <div className="flex w-full ">
-                <div className="w-[60%] flex">
+            <div className="sm:flex flex w-full ">
+                <div className="w-[100%] lg:w-[60%] flex">
                     <Image src={nftSrc} alt={''} width={150} height={150} />
-                    <div className="flex flex-col justify-between py-[10px] ml-[40px]">
-                        <h2>Loan Amount: {tokenValuation} WETH</h2>
+                    <div className="flex flex-col justify-between py-[10px] ml-[10px] sm:ml-[40px]">
+                        <h2>Loan: {loanValue} WETH</h2>
                         <h2>Duration: {duration} days</h2>
                         <h2>APR: {APR.toFixed(1)}%</h2>
                     </div>
                 </div>
-                <div className="flex items-center">
+                <div className="hidden sm:flex items-center">
                     <Button color="black" text="Accept" onClick={acceptOffer} />
                 </div>
             </div>
-            <h1 className="text-[16px]">{name}</h1>
+            <h1 className=" sm:text-[16px]">{name}</h1>
+            <div className="block mt-[20px] sm:hidden">
+                <Button color="black" text="Accept" onClick={acceptOffer} />
+            </div>
         </div>
     );
 };

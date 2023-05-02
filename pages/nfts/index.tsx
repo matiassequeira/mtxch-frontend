@@ -4,7 +4,11 @@ import { useAccount } from 'wagmi';
 
 const Nfts = () => {
     const { address } = useAccount();
-    return <>{address ? <NftsPage /> : <WalletNotConnected />}</>;
+    return (
+        <>
+            {address ? <NftsPage /> : <WalletNotConnected text="Connect your wallet to continue" />}
+        </>
+    );
 };
 
 export default Nfts;

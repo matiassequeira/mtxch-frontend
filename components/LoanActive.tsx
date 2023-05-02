@@ -59,10 +59,10 @@ const LoanActive = (props: LoanActiveProps) => {
     return (
         <>
             <div className="flex w-full ">
-                <div className="flex">
+                <div className="flex ">
                     <Image src={nftSrc} alt={''} width={150} height={150} />
-                    <div className="flex flex-col justify-between ml-[40px]">
-                        <h2>Loan Amount: {tokenValuation} WETH</h2>
+                    <div className="flex flex-col justify-between ml-[10px] sm:ml-[40px] text-[18px] sm:text-[20px]">
+                        <h2>Loan: {loanValue} WETH</h2>
                         <h2>Duration: {duration} days</h2>
                         <h2>APR: {APR.toFixed(1)}%</h2>
                         <h2>

@@ -6,6 +6,7 @@ import { BigNumberish, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 import UserContext, { UserContextType } from '@component/components/UserContext';
 import WalletNotConnected from '@component/components/WalletNotConnected';
+import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 
 export interface offer {
     borrower: `0x${string}`;
@@ -20,36 +21,53 @@ export interface offer {
     tokenValuation: BigNumberish;
 }
 
-let provider: any;
-if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
-} else {
-    provider = new ethers.providers.JsonRpcProvider(
-        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-    );
-}
-
 const Lend = () => {
+    let provider: any;
+    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+        provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    } else {
+        provider = new ethers.providers.JsonRpcProvider(
+            // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+            'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+        );
+    }
+
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [offers, setOffers] = useState<offer[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
+    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
     React.useEffect(() => {
         const getNetwork = async () => {
             const network = await provider.getNetwork();
-            if (network.name !== 'goerli') setIsGoerliNetwork(false);
-            else setIsGoerliNetwork(true);
+
+            if (network.name === 'goerli') {
+                setIsGoerliNetwork(true);
+                return;
+            }
+            setIsGoerliNetwork(false);
+            requestSwitchNetwork(setIsGoerliNetwork);
         };
         getNetwork();
+        const ethereum = window.ethereum as any;
+        ethereum.on('chainChanged', (chain: any) => {
+            if (chain === '0x5') {
+                setIsGoerliNetwork(true);
+                return;
+            } else {
+                setIsGoerliNetwork(false);
+                requestSwitchNetwork();
+            }
+        });
     }, []);
 
     React.useEffect(() => {
-        if (!address || !isGoerliNetwork) return;
-
+        setIsLoading(true);
         const getOffers = async () => {
+            const network = await provider.getNetwork();
+            if (network.name !== 'goerli') return;
+
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
             try {
                 const offers = await contract.getOffers();
@@ -62,19 +80,19 @@ const Lend = () => {
         getOffers();
     }, [address, metaxchgAddress, isGoerliNetwork]);
 
-    if (!address) return <WalletNotConnected />;
+    if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
 
     if (!isGoerliNetwork)
         return (
-            <div className="px-[120px] text-[#ff0000]">
-                Switch the network to Goerli in order to see Offers!
+            <div className="text-[#ff0000]">
+                <WalletNotConnected text={'Switch the network to Goerli in order to see Offers!'} />
             </div>
         );
 
-    if (isLoading) return <div className="px-[120px]">Loading...</div>;
+    if (isLoading) return <WalletNotConnected text={'Loading...'} />;
 
     return (
-        <div className="px-[120px] py-[20px]">
+        <div className="px-[20px] md:px-[120px] py-[20px]">
             <div className=" flex mb-4">
                 <div className="w-[60%]">
                     <h1 className="font-bold mb-[30px]">Loan Requests</h1>

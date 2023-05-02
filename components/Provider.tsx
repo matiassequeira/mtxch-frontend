@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserContext from './UserContext';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { goerli, mainnet } from 'wagmi/chains';
+import { goerli } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NftProvider } from 'use-nft';
 import { getDefaultProvider } from 'ethers';
@@ -18,6 +18,7 @@ const { provider } = configureChains(
     [goerli],
     [infuraProvider({ apiKey: '<https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6>' })], // Get Infura apiKey at https://www.infura.io/
 );
+
 export const connector = new MetaMaskConnector({ chains });
 const wagmiClient = createClient({
     autoConnect: true,

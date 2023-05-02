@@ -4,6 +4,7 @@ import { useAccount } from 'wagmi';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import UserContext, { UserContextType } from './UserContext';
+import WalletNotConnected from './WalletNotConnected';
 
 export interface NftItemInterface {
     id: number;
@@ -39,6 +40,7 @@ const NftsPage = () => {
         return asset;
     });
 
+    // const assets: NftItemInterface[] = data?.data.assets;
     if (!address) return null;
 
     return (
@@ -47,9 +49,9 @@ const NftsPage = () => {
                 <div className="mx-[120px]">Your NFTs are being loaded...</div>
             ) : assets.length ? (
                 <div>
-                    <div className="px-[120px] mb-3 space-y-6">
+                    <div className="px-[20px] md:px-[120px] mb-3 space-y-6 flex flex-col max-md:items-center  ">
                         <h1>Choose NFT for Loan Request</h1>
-                        <div className="grid grid-cols-4 gap-4 w-full ">
+                        <div className="flex flex-wrap justify-center md:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full ">
                             {assets.map((item) => {
                                 if (item.image_url?.startsWith('ipfs://')) {
                                     item.image_url = `https://ipfs.io/ipfs/${
@@ -63,7 +65,9 @@ const NftsPage = () => {
                 </div>
             ) : (
                 <div className="w-full flex flex-col items-center justify-center mt-[100px]">
-                    <h1>You have no NFTs from allowed collections</h1>
+                    <h1>
+                        <WalletNotConnected text="You have no NFTs from allowed collections" />
+                    </h1>
                 </div>
             )}
         </>
