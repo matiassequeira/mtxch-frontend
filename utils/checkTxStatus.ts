@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export async function checkTxStatus(provider: any, txHash: string) {
     const receipt = await provider.getTransactionReceipt(txHash);
 

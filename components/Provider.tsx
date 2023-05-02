@@ -5,10 +5,9 @@ import { goerli } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NftProvider } from 'use-nft';
 import { getDefaultProvider } from 'ethers';
-
 import { infuraProvider } from 'wagmi/providers/infura';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { ToastContainer } from 'react-toastify';
 
 const projectId = '6b8bb11f0139a5d4e9e753fc752d7ac6';
 
@@ -66,7 +65,23 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                         allowedCollections,
                         wethAddress,
                     }}>
-                    {ready ? <WagmiConfig client={client}>{children}</WagmiConfig> : null}
+                    {ready ? (
+                        <WagmiConfig client={client}>
+                            {children}
+                            <ToastContainer
+                                position="bottom-right"
+                                autoClose={5000}
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                                theme="light"
+                            />
+                        </WagmiConfig>
+                    ) : null}
                 </UserContext.Provider>
             </NftProvider>
         </QueryClientProvider>

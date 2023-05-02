@@ -7,6 +7,8 @@ import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 import { erc20ABI, useSwitchNetwork } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
+import { toast } from 'react-toastify';
+import { checkTxStatus } from '@component/utils/checkTxStatus';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -75,6 +77,15 @@ const LendItem: FC<LendItemProps> = (props) => {
             gasLimit: gasLimit,
         };
         const transactionResponse = await signer.sendTransaction(transaction);
+        const success = await toast.promise(
+            checkTxStatus(provider, transactionResponse.hash),
+            {
+                pending: 'Transaction is penging',
+                success: 'Transaction was succeed',
+                error: 'Transaction was failed',
+            },
+            { style: { fontSize: '18px' } },
+        );
     };
 
     return (

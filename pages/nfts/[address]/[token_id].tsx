@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import PendingTx from '@component/components/PendingTx';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 import WalletNotConnected from '@component/components/WalletNotConnected';
+import { toast } from 'react-toastify';
 
 export const getServerSideProps = async (context: any) => {
     const { address, token_id } = context.params;
@@ -34,8 +35,6 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { address } = useAccount();
     const [isOwner, setIsOwner] = useState(true);
     const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
-    const [openPendingMenu, setOpenPendingMenu] = useState(false);
-    const [txHash, setTxHash] = useState('');
     const router = useRouter();
 
     React.useEffect(() => {
@@ -111,9 +110,16 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
                 gasLimit: gasLimit,
             };
             const transactionResponse = await signer.sendTransaction(transaction);
-            setTxHash(transactionResponse.hash);
-            setOpenPendingMenu(true);
-            const success = await checkTxStatus(provider, transactionResponse.hash);
+
+            const success = await toast.promise(
+                checkTxStatus(provider, transactionResponse.hash),
+                {
+                    pending: 'Transaction is penging',
+                    success: 'Transaction was succeed',
+                    error: 'Transaction was failed',
+                },
+                { style: { fontSize: '18px' } },
+            );
             // IF SUCCESS REDIRECT TO BORROWER
 
             if (success) router.push('/loans');
@@ -138,16 +144,12 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
         );
 
     return (
-        <div className="px-[20px] md:px-[120px] flex flex-col items-center justify-center space-y-[50px] sm:flex-row mb-3">
+        <div className="px-[20px] md:px-[120px] flex flex-col items-center justify-center max-sm:space-y-[50px] sm:flex-row mb-3">
             <div className="w-[60%] xl:w-[55%]">
                 <NftListItem nftAddress={nftAddress} token_id={token_id} setIsOwner={setIsOwner} />
             </div>
 
             <ListForm listNft={listNft} />
-
-            {/* {openPendingMenu ? (
-                <PendingTx txHash={txHash} closeMenu={() => setOpenPendingMenu(false)} />
-            ) : null} */}
         </div>
     );
 };

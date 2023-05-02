@@ -6,6 +6,8 @@ import { ethers } from 'ethers';
 import UserContext, { UserContextType } from './UserContext';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 import { useNft } from 'use-nft';
+import { toast } from 'react-toastify';
+import { checkTxStatus } from '@component/utils/checkTxStatus';
 
 const LoanRequest = (props: LendItemProps) => {
     let provider: any;
@@ -36,6 +38,15 @@ const LoanRequest = (props: LendItemProps) => {
         };
 
         const transactionResponse = await signer.sendTransaction(transaction);
+        const success = await toast.promise(
+            checkTxStatus(provider, transactionResponse.hash),
+            {
+                pending: 'Transaction is penging',
+                success: 'Transaction was succeed',
+                error: 'Transaction was failed',
+            },
+            { style: { fontSize: '18px' } },
+        );
     };
 
     useEffect(() => {

@@ -10,6 +10,7 @@ import { useAccount } from 'wagmi';
 import { ethers } from 'ethers';
 import { erc20ABI } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
+import { toast } from 'react-toastify';
 const endpoints = getNetworkEndpoints(Network.Mainnet);
 const chainGrpcBankApi = new ChainGrpcBankApi(endpoints.grpc);
 
@@ -32,6 +33,19 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
     const [injBalance, setInjBalance] = React.useState(0);
     const [wethBalance, setWethBalance] = React.useState(0);
     const { wethAddress } = useContext(UserContext) as UserContextType;
+
+    const handleCopyAddress = () =>
+        toast.success('Address copied', {
+            position: 'bottom-right',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+            style: { fontSize: '18px' },
+        });
 
     React.useEffect(() => {
         if (!address) return;
@@ -66,6 +80,7 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
                 onMouseLeave={() => setShowPopup(false)}
                 onClick={() => {
                     navigator.clipboard.writeText(address);
+                    handleCopyAddress();
                 }}>
                 {`${address.substring(0, 6)}...${address.substring(address.length - 6)}`}
             </button>
@@ -80,6 +95,7 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
                             className="inline hover:cursor-pointer"
                             onClick={() => {
                                 navigator.clipboard.writeText(injAddress);
+                                handleCopyAddress();
                             }}>{` ${injAddress.substring(0, 6)}...${injAddress.substring(
                             injAddress.length - 6,
                         )}`}</p>
