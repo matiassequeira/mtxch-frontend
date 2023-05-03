@@ -9,6 +9,7 @@ import UserContext, { UserContextType } from './UserContext';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 import { toast } from 'react-toastify';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
+import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -28,10 +29,12 @@ export interface LendItemProps {
     tokenId: number;
     index: number;
     loanValue: number;
+    borrower: string;
 }
 
 const LendItem: FC<LendItemProps> = (props) => {
-    const { src, tokenValuation, APR, duration, nftAddress, tokenId, index, loanValue } = props;
+    const { src, tokenValuation, APR, duration, nftAddress, tokenId, index, loanValue, borrower } =
+        props;
     const { metaxchgAddress, wethAddress } = useContext(UserContext) as UserContextType;
     const [nftSrc, setNftSrc] = useState(src);
 
@@ -86,6 +89,14 @@ const LendItem: FC<LendItemProps> = (props) => {
             },
             { style: { fontSize: '18px' } },
         );
+        if (success) {
+            await notifiDirectPush(
+                `
+               Your Loan Request ${name} #${tokenId} Was Accepted
+                `,
+                borrower,
+            );
+        }
     };
 
     return (

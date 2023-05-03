@@ -102,11 +102,10 @@ const Lend = () => {
                     ? offers.map((offer, index) => {
                           const isActive = offer['isActive'];
                           if (!isActive) return null;
-                          if (offer['borrower'].toLowerCase() === address.toLowerCase())
-                              return null;
+                          const borrower = offer['borrower'];
+                          if (borrower.toLowerCase() === address.toLowerCase()) return null;
                           const duration = offer['duration'] / 86400;
                           const apr = offer['interestRate'];
-
                           const loanValue = Number(ethers.utils.formatEther(offer['loanValue']));
                           const tokenValuation = Number(
                               ethers.utils.formatEther(offer['tokenValuation']),
@@ -127,6 +126,7 @@ const Lend = () => {
                                   tokenId={tokenId}
                                   index={index}
                                   loanValue={loanValue}
+                                  borrower={borrower}
                               />
                           );
                       })

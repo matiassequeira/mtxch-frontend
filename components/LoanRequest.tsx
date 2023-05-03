@@ -8,6 +8,7 @@ import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 import { useNft } from 'use-nft';
 import { toast } from 'react-toastify';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
+import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 
 const LoanRequest = (props: LendItemProps) => {
     let provider: any;
@@ -20,7 +21,8 @@ const LoanRequest = (props: LendItemProps) => {
         );
     }
 
-    const { src, tokenValuation, APR, duration, index, nftAddress, tokenId, loanValue } = props;
+    const { src, tokenValuation, APR, duration, index, nftAddress, tokenId, loanValue, borrower } =
+        props;
     const { metaxchgAddress } = useContext(UserContext) as UserContextType;
 
     const [nftSrc, setNftSrc] = useState(src);
@@ -47,6 +49,18 @@ const LoanRequest = (props: LendItemProps) => {
             },
             { style: { fontSize: '18px' } },
         );
+        if (success) {
+            const name =
+                nftAddress.toLowerCase() === '0xfa97df129fe2ffdfd63bc3f245dd769f52742bad'
+                    ? 'Bored Ape Yacht Club'
+                    : 'CRYPTOPUNKS';
+            await notifiDirectPush(
+                `
+                       Your Loan Request ${name} #${tokenId} Was Cancelled
+                        `,
+                borrower,
+            );
+        }
     };
 
     useEffect(() => {

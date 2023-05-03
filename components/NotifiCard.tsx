@@ -1,18 +1,11 @@
 import { NotifiContext, NotifiSubscriptionCard } from '@notifi-network/notifi-react-card';
 import { arrayify } from 'ethers/lib/utils.js';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
-
-import { connector } from './Provider';
+import { useAccount, useSignMessage } from 'wagmi';
 
 export const WalletConnectCard = () => {
-    const { address, isConnected } = useAccount();
-
-    const { connect } = useConnect({
-        connector: connector,
-    });
-    const { disconnect } = useDisconnect();
-
+    const { address } = useAccount();
     const { signMessageAsync } = useSignMessage();
+
     return (
         <div>
             <NotifiContext

@@ -160,8 +160,8 @@ const Loans = () => {
                     <h1 className="font-bold">Loan Requests</h1>
                     {offers.length
                         ? offers.map(({ offer, index }) => {
-                              if (offer['borrower'].toLowerCase() !== address?.toLowerCase())
-                                  return null;
+                              const borrower = offer['borrower'].toLowerCase();
+                              if (borrower !== address?.toLowerCase()) return null;
                               if (!offer['isActive']) return null;
                               const duration = Number(offer['duration'].toString()) / 86400;
                               const apr = Number(offer['interestRate'].toString());
@@ -188,6 +188,7 @@ const Loans = () => {
                                       tokenId={tokenId}
                                       loanValue={loanValue}
                                       index={index}
+                                      borrower={borrower}
                                   />
                               );
                           })

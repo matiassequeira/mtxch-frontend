@@ -14,6 +14,7 @@ import PendingTx from '@component/components/PendingTx';
 import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 import WalletNotConnected from '@component/components/WalletNotConnected';
 import { toast } from 'react-toastify';
+import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 
 export const getServerSideProps = async (context: any) => {
     const { address, token_id } = context.params;
@@ -122,7 +123,20 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
             );
             // IF SUCCESS REDIRECT TO BORROWER
 
-            if (success) router.push('/loans');
+            if (success) {
+                const name =
+                    nftAddress.toLowerCase() === '0xfa97df129fe2ffdfd63bc3f245dd769f52742bad'
+                        ? 'Bored Ape Yacht Club'
+                        : 'CRYPTOPUNKS';
+                await notifiDirectPush(
+                    `
+                       Your Loan ${name} #${token_id} Was Successfully Listed
+                        `,
+                    address,
+                );
+
+                router.push('/loans');
+            }
         };
 
         makeOffer();
