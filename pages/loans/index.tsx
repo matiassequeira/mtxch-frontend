@@ -71,8 +71,7 @@ const Loans = () => {
                         return { loan, index };
                     })
                     .filter((item) => {
-                        if (item.loan.offer['borrower'].toLowerCase() !== address?.toLowerCase())
-                            return;
+                        if (item.loan.lender.toLowerCase() !== address?.toLowerCase()) return;
                         return item;
                     });
 
@@ -81,6 +80,7 @@ const Loans = () => {
                         return { offer, index };
                     })
                     .filter((item) => {
+                        if (!item.offer['isActive']) return null;
                         if (item.offer['borrower'].toLowerCase() !== address?.toLowerCase()) return;
                         return item;
                     });
@@ -120,80 +120,74 @@ const Loans = () => {
     return (
         <div className="px-[20px] md:px-[100px] ">
             <div className="max-lg:flex-col flex mb-4 ">
-                <div className="space-y-[25px] max-lg:w-[100%] w-[45%]">
-                    <h1 className="font-bold">Active Loans</h1>
-                    {loans.length
-                        ? loans.map(({ loan, index }) => {
-                              const offer = loan['offer'];
+                {loans.length ? (
+                    <div className="space-y-[25px] max-lg:w-[100%] w-[45%]">
+                        <h1 className="font-bold">Active Loans</h1>
+                        {loans.map(({ loan, index }) => {
+                            const offer = loan['offer'];
 
-                              const duration = Number(offer['duration'].toString()) / 86400;
-                              const apr = Number(offer['interestRate'].toString());
-                              const loanValue = Number(
-                                  ethers.utils.formatEther(offer['loanValue']),
-                              );
-                              const tokenValuation = Number(
-                                  ethers.utils.formatEther(offer['tokenValuation']),
-                              );
-                              const tokenId = Number(offer['tokenId'].toString());
-                              const nftAddress = offer['nftAddress'];
-                              const initialFloorPrice = Number(
-                                  ethers.utils.formatEther(offer['tokenFloorPrice']),
-                              ).toFixed(0);
+                            const duration = Number(offer['duration'].toString()) / 86400;
+                            const apr = Number(offer['interestRate'].toString());
+                            const loanValue = Number(ethers.utils.formatEther(offer['loanValue']));
+                            const tokenValuation = Number(
+                                ethers.utils.formatEther(offer['tokenValuation']),
+                            );
+                            const tokenId = Number(offer['tokenId'].toString());
+                            const nftAddress = offer['nftAddress'];
+                            const initialFloorPrice = Number(
+                                ethers.utils.formatEther(offer['tokenFloorPrice']),
+                            ).toFixed(0);
 
-                              return (
-                                  <LoanActive
-                                      key={`loanactive/${nftAddress}/${tokenId}/${index}`}
-                                      src={img1}
-                                      tokenValuation={tokenValuation}
-                                      APR={apr}
-                                      duration={duration}
-                                      nftAddress={nftAddress}
-                                      tokenId={tokenId}
-                                      initialFloorPrice={initialFloorPrice}
-                                      loanValue={loanValue}
-                                  />
-                              );
-                          })
-                        : null}
-                </div>
-                <div className="space-y-[25px] max-lg:w-[100%] w-[55%] max-lg:mt-[60px]">
-                    <h1 className="font-bold">Loan Requests</h1>
-                    {offers.length
-                        ? offers.map(({ offer, index }) => {
-                              const borrower = offer['borrower'].toLowerCase();
-                              if (borrower !== address?.toLowerCase()) return null;
-                              if (!offer['isActive']) return null;
-                              const duration = Number(offer['duration'].toString()) / 86400;
-                              const apr = Number(offer['interestRate'].toString());
-                              const loanValue = Number(
-                                  ethers.utils.formatEther(offer['loanValue']),
-                              );
-                              const tokenValuation = Number(
-                                  ethers.utils.formatEther(offer['tokenValuation']),
-                              );
-                              const tokenId = Number(offer['tokenId'].toString());
-                              const nftAddress = offer['nftAddress'];
-                              const initialFloorPrice = Number(
-                                  ethers.utils.formatEther(offer['tokenFloorPrice']),
-                              ).toFixed(0);
+                            return (
+                                <LoanActive
+                                    key={`loanactive/${nftAddress}/${tokenId}/${index}`}
+                                    src={img1}
+                                    tokenValuation={tokenValuation}
+                                    APR={apr}
+                                    duration={duration}
+                                    nftAddress={nftAddress}
+                                    tokenId={tokenId}
+                                    initialFloorPrice={initialFloorPrice}
+                                    loanValue={loanValue}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : null}
+                {offers.length ? (
+                    <div className="space-y-[25px] max-lg:w-[100%] w-[55%] max-lg:mt-[60px]">
+                        <h1 className="font-bold">Loan Requests</h1>
+                        {offers.map(({ offer, index }) => {
+                            const borrower = offer['borrower'].toLowerCase();
+                            const duration = Number(offer['duration'].toString()) / 86400;
+                            const apr = Number(offer['interestRate'].toString());
+                            const loanValue = Number(ethers.utils.formatEther(offer['loanValue']));
+                            const tokenValuation = Number(
+                                ethers.utils.formatEther(offer['tokenValuation']),
+                            );
+                            const tokenId = Number(offer['tokenId'].toString());
+                            const nftAddress = offer['nftAddress'];
+                            const initialFloorPrice = Number(
+                                ethers.utils.formatEther(offer['tokenFloorPrice']),
+                            ).toFixed(0);
 
-                              return (
-                                  <LoanRequest
-                                      key={`loanrequest/${nftAddress}/${tokenId}/${index}`}
-                                      src={img1}
-                                      tokenValuation={tokenValuation}
-                                      APR={apr}
-                                      duration={duration}
-                                      nftAddress={nftAddress}
-                                      tokenId={tokenId}
-                                      loanValue={loanValue}
-                                      index={index}
-                                      borrower={borrower}
-                                  />
-                              );
-                          })
-                        : null}
-                </div>
+                            return (
+                                <LoanRequest
+                                    key={`loanrequest/${nftAddress}/${tokenId}/${index}`}
+                                    src={img1}
+                                    tokenValuation={tokenValuation}
+                                    APR={apr}
+                                    duration={duration}
+                                    nftAddress={nftAddress}
+                                    tokenId={tokenId}
+                                    loanValue={loanValue}
+                                    index={index}
+                                    borrower={borrower}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : null}
             </div>
         </div>
     );
