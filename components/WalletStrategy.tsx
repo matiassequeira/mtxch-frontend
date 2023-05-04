@@ -86,10 +86,10 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
             </button>
             {showPopup ? (
                 <div
-                    className="text-[18px] left-[-165px] absolute rounded-xl rounded-tr-none w-[300px] bg-white border-black border-solid border-[2px] text-black"
+                    className="text-[18px] left-[-165px] absolute rounded-xl rounded-tr-none w-[300px] bg-white border-black border-solid border-[2px] text-black shadow-black "
                     onMouseEnter={() => setShowPopup(true)}
                     onMouseLeave={() => setShowPopup(false)}>
-                    <div className="p-[10px] border-black border-solid border-b-[2px]">
+                    <div className="hover:bg-slate-200 hover:cursor-pointer rounded-tl-xl p-[10px] border-black border-solid border-b-[2px]">
                         Injective Address:
                         <p
                             className="inline hover:cursor-pointer"
@@ -100,17 +100,17 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
                             injAddress.length - 6,
                         )}`}</p>
                     </div>
-                    <div className="p-[10px] border-black border-solid border-b-[2px]">
+                    <div className="hover:bg-slate-200 hover:cursor-pointer p-[10px] border-black border-solid border-b-[2px]">
                         Injective Balance: {injBalance}inj
                     </div>
-                    <div className="p-[10px] border-black border-solid border-b-[2px]">
+                    <div className="hover:bg-slate-200 hover:cursor-pointer p-[10px] border-black border-solid border-b-[2px]">
                         Injective WETH: 35WETH
                     </div>
-                    <div className="p-[10px] border-black border-solid border-b-[2px]">
+                    <div className="hover:bg-slate-200 hover:cursor-pointer p-[10px] border-black border-solid border-b-[2px]">
                         Goerli WETH: {wethBalance}WETH
                     </div>
                     <div
-                        className="p-[10px] border-black border-solid border-b-[2px] hover:cursor-pointer"
+                        className="p-[10px] border-black hover:cursor-pointer rounded-b-xl hover:bg-slate-200 cursor:pointer"
                         onClick={disconnect}>
                         Disconnect
                     </div>

@@ -83,7 +83,7 @@ export default function WalletConnect() {
                         </div>
                     </div>
                 ) : (
-                    <div className="space-x-[20px] flex items-center">
+                    <div className="space-x-[50px] flex items-center">
                         <NotifiBell />
                         <div className="">
                             <WalletStrategyComponent disconnect={onClick} />

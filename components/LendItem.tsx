@@ -83,8 +83,8 @@ const LendItem: FC<LendItemProps> = (props) => {
         const success = await toast.promise(
             checkTxStatus(provider, transactionResponse.hash),
             {
-                pending: 'Transaction is penging',
-                success: 'Transaction was succeed',
+                pending: 'Transaction is pending',
+                success: 'Transaction was Successful',
                 error: 'Transaction was failed',
             },
             { style: { fontSize: '18px' } },
