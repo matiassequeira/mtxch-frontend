@@ -51,6 +51,7 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
         };
         getNetwork();
         const ethereum = window.ethereum as any;
+        if (!ethereum) return;
         ethereum.on('chainChanged', (chain: any) => {
             if (chain === '0x5') {
                 setIsGoerliNetwork(true);
@@ -60,7 +61,7 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
                 requestSwitchNetwork();
             }
         });
-    }, [provider]);
+    }, [provider, window.ethereum]);
 
     const listNft = (data: {
         LoanAmount: number;

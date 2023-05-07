@@ -50,6 +50,7 @@ const Lend = () => {
         };
         getNetwork();
         const ethereum = window.ethereum as any;
+        if (!ethereum) return;
         ethereum.on('chainChanged', (chain: any) => {
             if (chain === '0x5') {
                 setIsGoerliNetwork(true);
@@ -59,7 +60,7 @@ const Lend = () => {
                 requestSwitchNetwork();
             }
         });
-    }, [provider]);
+    }, [provider, window.ethereum]);
 
     React.useEffect(() => {
         setIsLoading(true);

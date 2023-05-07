@@ -47,6 +47,7 @@ const Loans = () => {
         };
         getNetwork();
         const ethereum = window.ethereum as any;
+        if (!ethereum) return;
         ethereum.on('chainChanged', (chain: any) => {
             if (chain === '0x5') {
                 setIsGoerliNetwork(true);
@@ -56,7 +57,7 @@ const Loans = () => {
                 requestSwitchNetwork();
             }
         });
-    }, [provider]);
+    }, [provider, window.ethereum]);
 
     React.useEffect(() => {
         if (!address) return;
