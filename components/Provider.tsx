@@ -38,8 +38,6 @@ const ethersConfig = {
 const Provider = ({ children }: { children: React.ReactNode }) => {
     const [queryClient] = useState(() => new QueryClient());
     const [ready, setReady] = useState(false);
-    const [walletConnected, setWalletConnected] = useState(false);
-    const [userAddress, setUserAddress] = useState('');
     const metaxchgAddress = '0xe8C666d6a9965FdFF1A6Db2af8B1a9BF43670629';
     const wethAddress = '0x91Efc46E7C52ab1fFca310Ca7972AeA48891E5CD';
     const allowedCollections = [
@@ -52,18 +50,19 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         setReady(true);
     }, []);
+
+    const [isGoerliNetwork, setIsGoerliNetwork] = useState(false);
+
     return (
         <QueryClientProvider client={queryClient}>
             <NftProvider fetcher={['ethers', ethersConfig]}>
                 <UserContext.Provider
                     value={{
-                        walletConnected,
-                        setWalletConnected,
-                        userAddress,
-                        setUserAddress,
                         metaxchgAddress,
                         allowedCollections,
                         wethAddress,
+                        isGoerliNetwork,
+                        setIsGoerliNetwork,
                     }}>
                     {ready ? (
                         <WagmiConfig client={client}>

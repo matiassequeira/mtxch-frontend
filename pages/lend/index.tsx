@@ -6,7 +6,6 @@ import { BigNumberish, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 import UserContext, { UserContextType } from '@component/components/UserContext';
 import WalletNotConnected from '@component/components/WalletNotConnected';
-import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 
 export interface offer {
     borrower: `0x${string}`;
@@ -23,7 +22,7 @@ export interface offer {
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -31,54 +30,23 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     );
 }
 const Lend = () => {
-    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
+    const { metaxchgAddress, isGoerliNetwork } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [offers, setOffers] = useState<offer[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-
-    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
+    console.log(isGoerliNetwork);
     React.useEffect(() => {
-        const getNetwork = async () => {
-            const network = await provider.getNetwork();
-
-            if (network.name === 'goerli') {
-                setIsGoerliNetwork(true);
-                return;
-            }
-            setIsGoerliNetwork(false);
-            requestSwitchNetwork(setIsGoerliNetwork);
-        };
-        getNetwork();
-        const ethereum = window.ethereum as any;
-        if (!ethereum) return;
-        ethereum.on('chainChanged', (chain: any) => {
-            if (chain === '0x5') {
-                setIsGoerliNetwork(true);
-                return;
-            } else {
-                setIsGoerliNetwork(false);
-                requestSwitchNetwork();
-            }
-        });
-    }, [provider, window.ethereum]);
-
-    React.useEffect(() => {
+        if (!address || !isGoerliNetwork) return;
+        console.log('here');
         setIsLoading(true);
         const getOffers = async () => {
-            const network = await provider.getNetwork();
-            if (network.name !== 'goerli') return;
-
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
-            try {
-                const offers = await contract.getOffers();
-                setOffers(offers);
-                setIsLoading(false);
-            } catch (error) {
-                console.error(error);
-            }
+            const offers = await contract.getOffers();
+            setOffers(offers);
+            setIsLoading(false);
         };
         getOffers();
-    }, [address, metaxchgAddress, isGoerliNetwork, provider]);
+    }, [address, metaxchgAddress, isGoerliNetwork]);
 
     if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
 

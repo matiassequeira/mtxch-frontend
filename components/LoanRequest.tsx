@@ -13,7 +13,7 @@ import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 const LoanRequest = (props: LendItemProps) => {
     let provider: any;
     if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum as any);
+        provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
     } else {
         provider = new ethers.providers.JsonRpcProvider(
             // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',

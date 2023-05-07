@@ -18,7 +18,7 @@ const chainRestBankApi = new ChainRestBankApi(endpoints.rest);
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -32,7 +32,7 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
     const [injAddress, setInjAddress] = React.useState('');
     const [injBalance, setInjBalance] = React.useState(0);
     const [wethBalance, setWethBalance] = React.useState(0);
-    const { wethAddress } = useContext(UserContext) as UserContextType;
+    const { wethAddress, isGoerliNetwork } = useContext(UserContext) as UserContextType;
 
     const handleCopyAddress = () =>
         toast.success('Address copied', {
@@ -48,7 +48,7 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
         });
 
     React.useEffect(() => {
-        if (!address) return;
+        if (!address || !isGoerliNetwork) return;
         const injAddress = getInjectiveAddress(address);
 
         setInjAddress(injAddress);
@@ -62,13 +62,16 @@ const WalletStrategyComponent = ({ disconnect }: { disconnect: () => void }) => 
         };
         const getWethBalance = async () => {
             const tokenContract = new ethers.Contract(wethAddress, erc20ABI, provider);
-            const wethBalance = await tokenContract.balanceOf(address);
-            if (!wethBalance) return;
-            setWethBalance(Number(ethers.utils.formatEther(wethBalance)));
+            try {
+                const wethBalance = await tokenContract.balanceOf(address);
+                setWethBalance(Number(ethers.utils.formatEther(wethBalance)));
+            } catch (e) {
+                return;
+            }
         };
         getInjBalance();
         getWethBalance();
-    }, [address]);
+    }, [address, isGoerliNetwork]);
     if (!address) return null;
     return (
         <div className="relative">

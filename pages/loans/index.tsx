@@ -8,7 +8,6 @@ import UserContext, { UserContextType } from '@component/components/UserContext'
 import { offer } from '../lend';
 import LoanRequest from '@component/components/LoanRequest';
 import WalletNotConnected from '@component/components/WalletNotConnected';
-import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 
 export interface loan {
     initialDate: BigNumberish;
@@ -19,7 +18,7 @@ export interface loan {
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -27,40 +26,14 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
     );
 }
 const Loans = () => {
-    const { metaxchgAddress } = useContext(UserContext) as UserContextType;
+    const { metaxchgAddress, isGoerliNetwork } = useContext(UserContext) as UserContextType;
     const { address } = useAccount();
     const [loans, setLoans] = useState<{ loan: loan; index: number }[]>([]);
     const [offers, setOffers] = useState<{ offer: offer; index: number }[]>([]);
-    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
 
     React.useEffect(() => {
-        const getNetwork = async () => {
-            const network = await provider.getNetwork();
-
-            if (network.name === 'goerli') {
-                setIsGoerliNetwork(true);
-                return;
-            }
-            setIsGoerliNetwork(false);
-            requestSwitchNetwork(setIsGoerliNetwork);
-        };
-        getNetwork();
-        const ethereum = window.ethereum as any;
-        if (!ethereum) return;
-        ethereum.on('chainChanged', (chain: any) => {
-            if (chain === '0x5') {
-                setIsGoerliNetwork(true);
-                return;
-            } else {
-                setIsGoerliNetwork(false);
-                requestSwitchNetwork();
-            }
-        });
-    }, [provider, window.ethereum]);
-
-    React.useEffect(() => {
-        if (!address) return;
+        if (!address || !isGoerliNetwork) return;
         const getOffers = async () => {
             const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, provider);
             try {
@@ -94,17 +67,9 @@ const Loans = () => {
             }
         };
         getOffers();
-    }, [address, metaxchgAddress, provider]);
+    }, [address, metaxchgAddress, isGoerliNetwork, provider]);
 
-    React.useEffect(() => {
-        const getNetwork = async () => {
-            const network = await provider.getNetwork();
-            if (network.name !== 'goerli') setIsGoerliNetwork(false);
-            else setIsGoerliNetwork(true);
-        };
-        getNetwork();
-    }, [address, provider]);
-
+    if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
     if (!isGoerliNetwork)
         return (
             <div className="px-[120px] text-[#ff0000]">
@@ -112,7 +77,6 @@ const Loans = () => {
             </div>
         );
 
-    if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
     if (isLoading) return <div className="px-[120px]">Loading...</div>;
 
     if (!loans.length && !offers.length)

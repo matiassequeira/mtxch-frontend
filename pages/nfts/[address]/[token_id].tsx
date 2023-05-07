@@ -9,9 +9,6 @@ import UserContext, { UserContextType } from '@component/components/UserContext'
 import NftListItem from '@component/components/NftListItem';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
 import { useRouter } from 'next/router';
-
-import PendingTx from '@component/components/PendingTx';
-import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
 import WalletNotConnected from '@component/components/WalletNotConnected';
 import { toast } from 'react-toastify';
 import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
@@ -23,7 +20,7 @@ export const getServerSideProps = async (context: any) => {
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -32,36 +29,12 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 }
 const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { nftAddress, token_id } = props;
-    const { allowedCollections, metaxchgAddress } = useContext(UserContext) as UserContextType;
+    const { allowedCollections, metaxchgAddress, isGoerliNetwork } = useContext(
+        UserContext,
+    ) as UserContextType;
     const { address } = useAccount();
     const [isOwner, setIsOwner] = useState(true);
-    const [isGoerliNetwork, setIsGoerliNetwork] = useState(true);
     const router = useRouter();
-
-    React.useEffect(() => {
-        const getNetwork = async () => {
-            const network = await provider.getNetwork();
-
-            if (network.name === 'goerli') {
-                setIsGoerliNetwork(true);
-                return;
-            }
-            setIsGoerliNetwork(false);
-            requestSwitchNetwork(setIsGoerliNetwork);
-        };
-        getNetwork();
-        const ethereum = window.ethereum as any;
-        if (!ethereum) return;
-        ethereum.on('chainChanged', (chain: any) => {
-            if (chain === '0x5') {
-                setIsGoerliNetwork(true);
-                return;
-            } else {
-                setIsGoerliNetwork(false);
-                requestSwitchNetwork();
-            }
-        });
-    }, [provider, window.ethereum]);
 
     const listNft = (data: {
         LoanAmount: number;
@@ -142,6 +115,8 @@ const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
 
         makeOffer();
     };
+
+    if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
 
     if (!allowedCollections.includes(nftAddress.toLowerCase()))
         return <WalletNotConnected text={'This NFT is not supported'} />;

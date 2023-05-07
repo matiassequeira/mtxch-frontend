@@ -1,6 +1,6 @@
 import img1 from '../public/nftitem1.png';
 import Image from 'next/image';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { ethers } from 'ethers';
 import { useNft } from 'use-nft';
@@ -9,7 +9,7 @@ import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -33,9 +33,11 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
             ? 'Bored Ape Yacht Club'
             : 'CRYPTOPUNKS';
 
-    if (!loading && nft?.owner !== address) {
-        setIsOwner(false);
-    }
+    useEffect(() => {
+        if (!loading && nft?.owner !== address) {
+            setIsOwner(false);
+        }
+    }, [loading, address]);
 
     React.useEffect(() => {
         const getFloorPrice = async () => {

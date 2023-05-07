@@ -6,14 +6,14 @@ import { ethers } from 'ethers';
 import { abi as metaxchgAbi } from '../contracts/metaxchg.json';
 import { erc20ABI, useSwitchNetwork } from 'wagmi';
 import UserContext, { UserContextType } from './UserContext';
-import { requestSwitchNetwork } from '@component/utils/requestSwitchNetwork';
+
 import { toast } from 'react-toastify';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
 import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 
 let provider: any;
 if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
 } else {
     provider = new ethers.providers.JsonRpcProvider(
         // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
@@ -53,9 +53,7 @@ const LendItem: FC<LendItemProps> = (props) => {
     const acceptOffer = async () => {
         const signer = provider.getSigner();
         const signerAddress = signer.getAddress();
-        const network = await provider.getNetwork();
 
-        if (network.name !== 'goerli') await requestSwitchNetwork();
         const contract = new ethers.Contract(metaxchgAddress, metaxchgAbi, signer);
         const tokenContract = new ethers.Contract(wethAddress, erc20ABI, signer);
 
