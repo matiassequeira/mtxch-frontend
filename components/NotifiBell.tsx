@@ -24,7 +24,7 @@ const NotifiBell = () => {
     return (
         <div className="relative" ref={notifiRef}>
             <svg
-                className="hover:cursor-pointer"
+                className="hover:cursor-pointer hover:scale-105 active:scale-95 transition-all"
                 onClick={() => {
                     setOpenMenu((prev) => !prev);
                 }}

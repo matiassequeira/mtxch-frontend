@@ -1,35 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import UserContext from './UserContext';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { goerli } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NftProvider } from 'use-nft';
 import { getDefaultProvider } from 'ethers';
 import { infuraProvider } from 'wagmi/providers/infura';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { ToastContainer } from 'react-toastify';
+
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+    darkTheme,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 
 const projectId = '6b8bb11f0139a5d4e9e753fc752d7ac6';
 
-const chains = [goerli];
-
-const { provider } = configureChains(
+const { chains, publicClient } = configureChains(
     [goerli],
     [infuraProvider({ apiKey: '<https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6>' })], // Get Infura apiKey at https://www.infura.io/
 );
 
-export const connector = new MetaMaskConnector({ chains });
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors: [connector],
-    provider: provider,
-});
+const { connectors } = getDefaultWallets({
+    appName: 'My RainbowKit App',
+    projectId: projectId,
+    chains
+  });
 
-const client = createClient({
+  const wagmiConfig = createConfig({
     autoConnect: true,
-    connectors: [new MetaMaskConnector({ chains })],
-    provider,
-});
+    connectors,
+    publicClient
+  })
+
+// export const connectors = [
+//     new MetaMaskConnector({ chains }),
+//     new CoinbaseWalletConnector({
+//       chains,
+//       options: {
+//         appName: 'wagmi',
+//       },
+//     }),
+//     new WalletConnectConnector({
+//       chains,
+//       options: {
+//         projectId,
+//       },
+//     }),
+//   ]
+
+
+// const client = createClient({
+//     autoConnect: true,
+//     connectors,
+//     provider,
+// });
 
 const ethersConfig = {
     provider: getDefaultProvider('https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6'),
@@ -65,8 +91,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                         setIsGoerliNetwork,
                     }}>
                     {ready ? (
-                        <WagmiConfig client={client}>
+                        <WagmiConfig config={wagmiConfig}>
+                             <RainbowKitProvider modalSize='compact' chains={chains} coolMode={true}>
                             {children}
+      </RainbowKitProvider>
                             <ToastContainer
                                 position="bottom-right"
                                 autoClose={5000}

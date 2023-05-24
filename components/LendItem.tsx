@@ -11,15 +11,11 @@ import { toast } from 'react-toastify';
 import { checkTxStatus } from '@component/utils/checkTxStatus';
 import { notifiDirectPush } from '@component/utils/NotifiDirectPush';
 
-let provider: any;
-if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
-} else {
-    provider = new ethers.providers.JsonRpcProvider(
-        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-    );
-}
+const provider = new ethers.providers.JsonRpcProvider(
+    // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    "https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6"
+  );
+  
 export interface LendItemProps {
     src: any;
     tokenValuation: number;

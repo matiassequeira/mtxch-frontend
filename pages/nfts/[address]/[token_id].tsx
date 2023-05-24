@@ -18,15 +18,11 @@ export const getServerSideProps = async (context: any) => {
     return { props: { nftAddress: address, token_id: token_id } };
 };
 
-let provider: any;
-if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-    provider = new ethers.providers.Web3Provider(window.ethereum as any, 'any');
-} else {
-    provider = new ethers.providers.JsonRpcProvider(
-        // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-        'https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
-    );
-}
+const provider = new ethers.providers.JsonRpcProvider(
+    // 'https://mainnet.infura.io/v3/49e9ff3061214414b9baa13fc93313a6',
+    "https://goerli.infura.io/v3/49e9ff3061214414b9baa13fc93313a6"
+  );
+  
 const LoanNft = (props: { nftAddress: `0x${string}`; token_id: string }) => {
     const { nftAddress, token_id } = props;
     const { allowedCollections, metaxchgAddress, isGoerliNetwork } = useContext(

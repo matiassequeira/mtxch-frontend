@@ -12,6 +12,7 @@
     "@injectivelabs/sdk-ts": "^1.10.72",
     "@notifi-network/notifi-node": "^0.64.0",
     "@notifi-network/notifi-react-card": "^0.64.0",
+    "@rainbow-me/rainbowkit": "^1.0.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
@@ -31,6 +32,7 @@
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4",
     "use-nft": "^0.12.0",
-    "wagmi": "^0.12.10"
+    "viem": "^0.3.36",
+    "wagmi": "^1.0.5"
   }
 }
