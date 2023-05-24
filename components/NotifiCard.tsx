@@ -11,7 +11,7 @@ export const WalletConnectCard = () => {
             <NotifiContext
                 dappAddress="metaxchg"
                 env="Development" // or "Production"
-                signMessage={async (message) => {
+                signMessage={async (message: any) => {
                     const result = await signMessageAsync({ message });
                     return arrayify(result);
                 }}

@@ -46,7 +46,7 @@ const NftListItem = ({ nftAddress, token_id, setIsOwner }: NftListItemProps) => 
             }
         };
         getFloorPrice();
-    }, [metaxchgAddress, nftAddress, provider]);
+    }, [metaxchgAddress, nftAddress, nft?.owner, setIsOwner]);
 
     return (
         <>

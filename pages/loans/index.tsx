@@ -63,7 +63,7 @@ const Loans = () => {
             }
         };
         getOffers();
-    }, [address, metaxchgAddress, isGoerliNetwork, provider]);
+    }, [address, metaxchgAddress, isGoerliNetwork]);
 
     if (!address) return <WalletNotConnected text={'Connect your wallet to continue'} />;
     if (!isGoerliNetwork)

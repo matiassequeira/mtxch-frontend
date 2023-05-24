@@ -74,7 +74,7 @@ const WalletStrategyComponent = ({closeMenu}: {closeMenu: ()=>void}) => {
         };
         getInjBalance();
         getWethBalance();
-    }, [address]);
+    }, [address, wethAddress]);
 
     React.useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -88,7 +88,7 @@ const WalletStrategyComponent = ({closeMenu}: {closeMenu: ()=>void}) => {
             // Unbind the event listener on clean up
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [closeMenu]);
 
     if (!address) return null;
     return (
